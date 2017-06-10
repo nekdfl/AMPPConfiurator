@@ -7,7 +7,7 @@ public:
   ~Constants();
 
   const char *comport_name = "comport";
-  const char *nocomport_name = "no selected";
+  const char *nocomport_value = "no selected";
 
   const char *maxtemp_name = "mintemp";
   const char *mintemp_name = "maxtemp";

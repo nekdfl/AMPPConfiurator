@@ -1,10 +1,10 @@
 #ifndef MATHLOGIC_H
 #define MATHLOGIC_H
 
-#include <QObject>
-#include <QPair>
 #include <QList>
 #include <QMap>
+#include <QObject>
+#include <QPair>
 #include <QString>
 #include <algorithm>
 
@@ -12,152 +12,86 @@
 
 #include "node.h"
 
-class MathLogic : public QObject
-{
-    Q_OBJECT
+class MathLogic : public QObject {
+  Q_OBJECT
 private:
-    typedef QList <Node> NodeList_t;
-    typedef QMap <QString, Node> ExtraNodeMap_t;
-    const char* cooloff="cooloff";
-    const char* alarmoff="alarmoff";
-    const char* alarmon="alarmon";
-    const char* poweroff="poweroff";
-    const char* cool70="cool70";
-    const char* cool90="cool90";
-    const char* cool100="cool100";
-public:
-    explicit MathLogic(const int &a_min, const int &a_max);
-    ~MathLogic();
+  typedef QList<Node> NodeList_t;
+  typedef QMap<QString, Node> ExtraNodeMap_t;
+  const char *cooloff = "cooloff";
+  const char *alarmoff = "alarmoff";
+  const char *alarmon = "alarmon";
+  const char *poweroff = "poweroff";
+  const char *cool70 = "cool70";
+  const char *cool90 = "cool90";
+  const char *cool100 = "cool100";
 
-    void addVal(const QString &a_name, const int &a_val);
-    void addExtraVal(const QString &a_name, const int &a_val);
+public:
+  explicit MathLogic(const int &a_min, const int &a_max);
+  ~MathLogic();
+
+  void addVal(const QString &a_name, const int &a_val);
+  void addExtraVal(const QString &a_name, const int &a_val);
+
+  QList<QPair<QString, int>> getPairListFromBtree();
 
 protected:
-    NodeList_t m_bintree_lst;
-    ExtraNodeMap_t m_extraval_map;
+  NodeList_t m_bintree_lst;
+  ExtraNodeMap_t m_extraval_map;
 
-    const int m_min;
-    const int m_max;
+  const int m_min;
+  const int m_max;
+
 private:
-    void updateBintree(const QString &a_name, const int &a_val);
-    inline void recalcLeft(const NodeList_t::iterator &res_it);
-    inline void recalcRight(NodeList_t::iterator res_it);
-    int checkMaxMin(const int &a_val);
+  void updateBintree(const QString &a_name, const int &a_val);
+  inline void recalcLeft(const NodeList_t::iterator &res_it);
+  inline void recalcRight(NodeList_t::iterator res_it);
+  int checkMaxMin(const int &a_val);
 
-    void recalcExtraVal();
-    void recalcAlarmOff();
-    void recalcAlarmON();
-    void recalcPowerOff();
+  void recalcExtraVal();
+  void recalcAlarmOff();
+  void recalcAlarmON();
+  void recalcPowerOff();
 
-    void updateAlarmOff_node(const int &a_val);
-    void updateAlarmON_node(const int &a_val);
-    void updatePowerOff_node(const int &a_val);
+  void updateAlarmOff_node(const int &a_val);
+  void updateAlarmON_node(const int &a_val);
+  void updatePowerOff_node(const int &a_val);
 
-    QList<QPair<QString, int>> getPairListFromBtree();
-    void send_signal();
+  void send_signal();
 
 signals:
-    void presetValueReady(const QList<QPair<QString, int> > &a_vallist);
-    void extraValueReady(const ExtraNodeMap_t &a_vallist);
+  void presetValueReady(const QList<QPair<QString, int>> &a_vallist);
+  void extraValueReady(const ExtraNodeMap_t &a_vallist);
 
 public slots:
-    void onDialMoved(const QString &a_name, const int &a_val)
-    {
-//        qWarning() << " ";
-//        qDebug() << "moved: " << a_name << ": " <<a_val;
+  void onDialMoved(const QString &a_name, const int &a_val) {
+    //        qWarning() << " ";
+    //        qDebug() << "moved: " << a_name << ": " <<a_val;
 
-        if (a_name == alarmoff)
-        {
-            updateAlarmOff_node(a_val);
-            send_signal();
-        }else if (a_name == alarmon)
-        {
-            updateAlarmON_node(a_val);
-            send_signal();
-        }else if (a_name == poweroff)
-        {
-            updatePowerOff_node(a_val);
-            send_signal();
-        }
-        else
-        {
-            updateBintree(a_name, a_val);
+    if (a_name == alarmoff) {
+      updateAlarmOff_node(a_val);
+      send_signal();
+    } else if (a_name == alarmon) {
+      updateAlarmON_node(a_val);
+      send_signal();
+    } else if (a_name == poweroff) {
+      updatePowerOff_node(a_val);
+      send_signal();
+    } else {
+      updateBintree(a_name, a_val);
 
-            recalcExtraVal();
+      recalcExtraVal();
 
-            send_signal();
-        }
-
-
-
-
-
+      send_signal();
     }
+  }
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//class MathLogic : public QObject
+// class MathLogic : public QObject
 //{
 //    Q_OBJECT
-//private:
+// private:
 //    typedef QList <QPair <QString, int>> ValueList_t;
-//public:
+// public:
 //    explicit MathLogic()
 //    {
 //        m_bintree.clear();
@@ -183,8 +117,10 @@ public slots:
 //                vcurrentnode=vcurrentnode->getRight();
 //            }
 
-//            qDebug() << "add " << a_name << ": " << a_val << "; to " << vcurrentnode->getName();
-//            QSharedPointer<BinaryNode> vnode = QSharedPointer<BinaryNode>::create(a_name, a_val, vcurrentnode);
+//            qDebug() << "add " << a_name << ": " << a_val << "; to " <<
+//            vcurrentnode->getName();
+//            QSharedPointer<BinaryNode> vnode =
+//            QSharedPointer<BinaryNode>::create(a_name, a_val, vcurrentnode);
 //            vcurrentnode->addBinaryNode(vnode);
 //        }
 //    }
@@ -195,13 +131,14 @@ public slots:
 //        m_extbintree_lst.push_back(ptr);
 //    }
 
-//protected:
+// protected:
 ////    QSharedPointer <BinaryNode> m_bintree;
 //    QList< QSharedPointer <BinaryNode>> m_bintree_lst;
 //    QList< QSharedPointer <BinaryNode>> m_extbintree_lst;
 
-//private:
-//    inline QSharedPointer <BinaryNode> updateBintree(const QString &a_name, const int &a_val)
+// private:
+//    inline QSharedPointer <BinaryNode> updateBintree(const QString &a_name,
+//    const int &a_val)
 //    {
 //        auto vcurrentnode = m_bintree;
 //        if (!vcurrentnode.isNull())
@@ -226,7 +163,8 @@ public slots:
 //                if (vcurrentnode->getVal() > right->getVal() )
 //                {
 //                    right->setVal(vcurrentnode->getVal());
-//                    qDebug() << "update " << right->getName() << ": " << right->getVal();
+//                    qDebug() << "update " << right->getName() << ": " <<
+//                    right->getVal();
 //                }
 
 //                vcurrentnode=vcurrentnode->getRight();
@@ -268,19 +206,21 @@ public slots:
 //        auto vcurrentnode = m_bintree;
 //        while (!vcurrentnode->getRight().isNull())
 //        {
-//            vpairlist.push_back(QPair<QString, int>(vcurrentnode->getName(), vcurrentnode->getVal()));
+//            vpairlist.push_back(QPair<QString, int>(vcurrentnode->getName(),
+//            vcurrentnode->getVal()));
 //            vcurrentnode=vcurrentnode->getRight();
 //        }
 
-//        vpairlist.push_back(QPair<QString, int>(vcurrentnode->getName(), vcurrentnode->getVal()));
+//        vpairlist.push_back(QPair<QString, int>(vcurrentnode->getName(),
+//        vcurrentnode->getVal()));
 
 //        return vpairlist;
 //    }
 
-//signals:
+// signals:
 //    void previewValueReady(const QList<QPair<QString, int> > &a_vallist);
 
-//public slots:
+// public slots:
 //    void onDialMoved(const QString &a_name, const int &a_val)
 //    {
 //        qDebug() << "moved: " << a_name << ": " <<a_val;

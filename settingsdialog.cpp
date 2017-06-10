@@ -22,10 +22,9 @@ SettingsDialog::SettingsDialog(
   connectMathLogicToTemperaturelBlocks();
 
   connect(m_btncancel_qptr, &QPushButton::clicked, [this]() { this->close(); });
-
   connect(m_btnok_qptr, &QPushButton::clicked, [this]() {
-    m_settings_ptr->setValue(m_constants.comport_name,
-                             m_rs232_combo->currentText());
+    saveComportToConfig();
+    saveTemperatureListToConfig();
   });
 
   this->setLayout(m_mainvb_lay);
@@ -48,7 +47,9 @@ void SettingsDialog::addComPortWidget() {
       m_rs232_combo->addItem(it.portName());
     }
   } else {
-    m_rs232_combo->addItem(m_constants.nocomport_name);
+    auto default_comport = m_settings_ptr->value(m_constants.comport_name,
+                                                 m_constants.nocomport_value);
+    m_rs232_combo->addItem(default_comport.toString());
   }
 
   m_horizrs232_lay->addWidget(m_rs232_lbl);
@@ -105,5 +106,17 @@ void SettingsDialog::connectTemperatureBlocksToMathLogic() {
         it->onValueChanged();
       }
     });
+  }
+}
+
+void SettingsDialog::saveComportToConfig() {
+  m_settings_ptr->setValue(m_constants.comport_name,
+                           m_rs232_combo->currentText());
+}
+
+void SettingsDialog::saveTemperatureListToConfig() {
+  auto vtemperature_list = m_mathlogic_qptr->getPairListFromBtree();
+  for (auto &it : vtemperature_list) {
+    m_settings_ptr->setValue(it.first, it.second);
   }
 }
