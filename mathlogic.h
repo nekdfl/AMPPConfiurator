@@ -12,78 +12,88 @@
 
 #include "node.h"
 
-class MathLogic : public QObject {
-  Q_OBJECT
-private:
-  typedef QList<Node> NodeList_t;
-  typedef QMap<QString, Node> ExtraNodeMap_t;
-  const char *cooloff = "cooloff";
-  const char *alarmoff = "alarmoff";
-  const char *alarmon = "alarmon";
-  const char *poweroff = "poweroff";
-  const char *cool70 = "cool70";
-  const char *cool90 = "cool90";
-  const char *cool100 = "cool100";
+class MathLogic : public QObject
+{
+    Q_OBJECT
+  private:
+    typedef QList<Node> NodeList_t;
+    typedef QMap<QString, Node> ExtraNodeMap_t;
+    const char *cooloff = "cooloff";
+    const char *alarmoff = "alarmoff";
+    const char *alarmon = "alarmon";
+    const char *poweroff = "poweroff";
+    const char *cool70 = "cool70";
+    const char *cool90 = "cool90";
+    const char *cool100 = "cool100";
 
-public:
-  explicit MathLogic(const int &a_min, const int &a_max);
-  ~MathLogic();
+  public:
+    explicit MathLogic(const int &a_min, const int &a_max);
+    ~MathLogic();
 
-  void addVal(const QString &a_name, const int &a_val);
-  void addExtraVal(const QString &a_name, const int &a_val);
+    void addVal(const QString &a_name, const int &a_val);
+    void addExtraVal(const QString &a_name, const int &a_val);
 
-  QList<QPair<QString, int>> getPairListFromBtree();
+    QList<QPair<QString, int>> getPairListFromBtree();
 
-protected:
-  NodeList_t m_bintree_lst;
-  ExtraNodeMap_t m_extraval_map;
+  protected:
+    NodeList_t m_bintree_lst;
+    ExtraNodeMap_t m_extraval_map;
 
-  const int m_min;
-  const int m_max;
+    const int m_min;
+    const int m_max;
 
-private:
-  void updateBintree(const QString &a_name, const int &a_val);
-  inline void recalcLeft(const NodeList_t::iterator &res_it);
-  inline void recalcRight(NodeList_t::iterator res_it);
-  int checkMaxMin(const int &a_val);
+  private:
+    void updateBintree(const QString &a_name, const int &a_val);
+    inline void recalcLeft(const NodeList_t::iterator &res_it);
+    inline void recalcRight(NodeList_t::iterator res_it);
+    int checkMaxMin(const int &a_val);
 
-  void recalcExtraVal();
-  void recalcAlarmOff();
-  void recalcAlarmON();
-  void recalcPowerOff();
+    void recalcExtraVal();
+    void recalcAlarmOff();
+    void recalcAlarmON();
+    void recalcPowerOff();
 
-  void updateAlarmOff_node(const int &a_val);
-  void updateAlarmON_node(const int &a_val);
-  void updatePowerOff_node(const int &a_val);
+    void updateAlarmOff_node(const int &a_val);
+    void updateAlarmON_node(const int &a_val);
+    void updatePowerOff_node(const int &a_val);
 
-  void send_signal();
+    void send_signal();
 
-signals:
-  void presetValueReady(const QList<QPair<QString, int>> &a_vallist);
-  void extraValueReady(const ExtraNodeMap_t &a_vallist);
+  signals:
+    void presetValueReady(const QList<QPair<QString, int>> &a_vallist);
+    void extraValueReady(const ExtraNodeMap_t &a_vallist);
 
-public slots:
-  void onDialMoved(const QString &a_name, const int &a_val) {
-    //        qWarning() << " ";
-    //        qDebug() << "moved: " << a_name << ": " <<a_val;
+  public slots:
+    void
+    onDialMoved(const QString &a_name, const int &a_val)
+    {
+        //        qWarning() << " ";
+        //        qDebug() << "moved: " << a_name << ": " <<a_val;
 
-    if (a_name == alarmoff) {
-      updateAlarmOff_node(a_val);
-      send_signal();
-    } else if (a_name == alarmon) {
-      updateAlarmON_node(a_val);
-      send_signal();
-    } else if (a_name == poweroff) {
-      updatePowerOff_node(a_val);
-      send_signal();
-    } else {
-      updateBintree(a_name, a_val);
+        if (a_name == alarmoff)
+        {
+            updateAlarmOff_node(a_val);
+            send_signal();
+        }
+        else if (a_name == alarmon)
+        {
+            updateAlarmON_node(a_val);
+            send_signal();
+        }
+        else if (a_name == poweroff)
+        {
+            updatePowerOff_node(a_val);
+            send_signal();
+        }
+        else
+        {
+            updateBintree(a_name, a_val);
 
-      recalcExtraVal();
+            recalcExtraVal();
 
-      send_signal();
+            send_signal();
+        }
     }
-  }
 };
 
 // class MathLogic : public QObject

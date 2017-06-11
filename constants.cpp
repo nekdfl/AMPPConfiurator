@@ -1,10 +1,9 @@
 #include "constants.h"
 
-Constants* Constants::m_pinstance = 0;
+Constants *Constants::m_pinstance = 0;
 
 Constants::Constants()
 {
-
 }
 
 Constants::~Constants()
@@ -13,10 +12,10 @@ Constants::~Constants()
         delete m_pinstance;
 }
 
-Constants& Constants::getInstance()
+Constants &Constants::getInstance()
 {
     if (m_pinstance == 0)
-         m_pinstance = new Constants();
+        m_pinstance = new Constants();
 
     return *m_pinstance;
 }
