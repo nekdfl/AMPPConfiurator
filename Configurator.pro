@@ -47,3 +47,8 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui
+
+RESOURCES += \
+    icons.qrc
+
+DISTFILES +=

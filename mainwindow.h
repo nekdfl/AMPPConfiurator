@@ -47,8 +47,11 @@ class MainWindow : public QMainWindow
     QPointer<CPanel> m_cpanel_qptr;
     QPointer<QSettings> m_settings_qptr;
     QPointer<SettingsDialog> m_settingsdialog_qptr;
+    QPointer<QSerialPort> m_serialport;
     QList<ConstructControlBlock> m_cntrBlckList;
     const Constants &m_constants;
+
+    QPointer<QComboBox> m_serialport_cbb;
 
   private slots:
     // menu action

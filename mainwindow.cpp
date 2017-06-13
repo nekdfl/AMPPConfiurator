@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     createGUI();
 
     connect(ui->action_Preferances, &QAction::triggered, this, &MainWindow::onConfigureAct);
-    connect(ui->action_Load_defaults, &QAction::triggered, this, &MainWindow::onLoadDefaults);
+    connect(ui->action_Load_default, &QAction::triggered, this, &MainWindow::onLoadDefaults);
     connect(ui->action_Quit, &QAction::triggered, this, &MainWindow::onQuitAct);
 }
 
@@ -92,6 +92,13 @@ void MainWindow::createGUI()
     this->setMaximumSize(m_constants.maxwindowwidth, m_constants.maxwindowheight);
     this->setMinimumSize(m_constants.minwindowwidth, m_constants.minwindowheight);
 
+//    QList<QToolBar *> toolbars = this->findChildren<QToolBar *>("maintoolbar");
+//    for (auto &it : toollbars)
+//    {
+
+//    }
+
+
     m_cpanel_qptr = new CPanel(m_cntrBlckList, m_settings_qptr->value(m_constants.mintemp_name).toInt(),
                                m_settings_qptr->value(m_constants.maxtemp_name).toInt());
     setCentralWidget(m_cpanel_qptr);
@@ -99,10 +106,12 @@ void MainWindow::createGUI()
 
 void MainWindow::onAboutAct()
 {
+
 }
 
 void MainWindow::onClearConsoleAct()
 {
+
 }
 
 void MainWindow::onConfigureAct()
@@ -123,6 +132,7 @@ void MainWindow::onLoadDefaults()
 
 void MainWindow::onConnectAct()
 {
+
 }
 
 void MainWindow::onDisconnecAct()
