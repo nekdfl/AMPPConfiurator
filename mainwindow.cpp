@@ -92,11 +92,11 @@ void MainWindow::createGUI()
     this->setMaximumSize(m_constants.maxwindowwidth, m_constants.maxwindowheight);
     this->setMinimumSize(m_constants.minwindowwidth, m_constants.minwindowheight);
 
-//    QList<QToolBar *> toolbars = this->findChildren<QToolBar *>("maintoolbar");
-//    for (auto &it : toollbars)
-//    {
-
-//    }
+    QList<QToolBar *> toolbars = this->findChildren<QToolBar *>("maintoolBar");
+    for (auto &it : toolbars)
+    {
+        qDebug() << "toolbars: " << it->objectName()  ;
+    }
 
 
     m_cpanel_qptr = new CPanel(m_cntrBlckList, m_settings_qptr->value(m_constants.mintemp_name).toInt(),
