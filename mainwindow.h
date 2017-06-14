@@ -6,6 +6,7 @@
 #include <QSettings>
 #include <QWidget>
 #include <QtGui>
+#include <QTextEdit>
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 
@@ -44,11 +45,15 @@ class MainWindow : public QMainWindow
 
     // vars
     Ui::MainWindow *ui;
+
+    QPointer<QWidget> m_mainwindow;
+    QPointer<QVBoxLayout> m_mainlayout_vb;
     QPointer<CPanel> m_cpanel_qptr;
+    QPointer<QTextEdit> m_console_qptr;
     QPointer<QSettings> m_settings_qptr;
     QPointer<SettingsDialog> m_settingsdialog_qptr;
     QPointer<QSerialPort> m_serialport;
-    QList<ConstructControlBlock> m_cntrBlckList;
+    QList<ConstructControlBlock> m_controlBlockElements;
     const Constants &m_constants;
 
     QPointer<QComboBox> m_serialport_cbb;
@@ -59,7 +64,9 @@ class MainWindow : public QMainWindow
     void onDisconnecAct();
     void onQuitAct();
     void onConfigureAct();
+    void onSaveDefaults();
     void onLoadDefaults();
+    void onShowHideConsoleAct();
     void onClearConsoleAct();
     void onHelpAct();
     void onAboutAct();

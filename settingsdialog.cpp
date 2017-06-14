@@ -21,8 +21,13 @@ SettingsDialog::SettingsDialog(QSettings *a_settings_ptr, const QList<ConstructC
     connectTemperatureBlocksToMathLogic();
     connectMathLogicToTemperaturelBlocks();
 
-    connect(m_btncancel_qptr, &QPushButton::clicked, [this]() { this->close(); });
-    connect(m_btnok_qptr, &QPushButton::clicked, [this]() {
+    connect(m_btncancel_qptr, &QPushButton::clicked, [this]()
+    {
+        this->close();
+    });
+
+    connect(m_btnok_qptr, &QPushButton::clicked, [this]()
+    {
         saveComportToConfig();
         saveTemperatureListToConfig();
         this->close();

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>672</height>
+    <height>681</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -43,6 +43,9 @@
     </property>
     <addaction name="action_Connect"/>
     <addaction name="action_Disconnect"/>
+    <addaction name="separator"/>
+    <addaction name="action_Read_settings"/>
+    <addaction name="action_Write_to_device"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
@@ -90,31 +93,46 @@
    <addaction name="action_Show_hide_console"/>
    <addaction name="action_Clear_console"/>
    <addaction name="separator"/>
-   <addaction name="actionSave_as_default"/>
+   <addaction name="action_Save_as_default"/>
    <addaction name="action_Load_default"/>
    <addaction name="separator"/>
+   <addaction name="action_Read_settings"/>
+   <addaction name="action_Write_to_device"/>
    <addaction name="action_Quit"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_Connect">
    <property name="icon">
-    <iconset theme="icon"/>
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/network-transmit-receive.png</normaloff>:/icons/icons/network-transmit-receive.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Connect</string>
    </property>
   </action>
   <action name="action_Disconnect">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/network-offline.png</normaloff>:/icons/icons/network-offline.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Disconnect</string>
    </property>
   </action>
   <action name="action_Quit">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/power.png</normaloff>:/icons/icons/power.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Quit</string>
    </property>
   </action>
   <action name="action_Clear_console">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/broom48.png</normaloff>:/icons/icons/broom48.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Clear console</string>
    </property>
@@ -125,6 +143,10 @@
    </property>
   </action>
   <action name="action_Show_hide_console">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/cmd.png</normaloff>:/icons/icons/cmd.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Show/hide console</string>
    </property>
@@ -140,17 +162,45 @@
    </property>
   </action>
   <action name="action_Load_default">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/load.png</normaloff>:/icons/icons/load.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Load default</string>
    </property>
   </action>
-  <action name="actionSave_as_default">
+  <action name="action_Save_as_default">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/save.png</normaloff>:/icons/icons/save.png</iconset>
+   </property>
    <property name="text">
     <string>Save as default</string>
    </property>
   </action>
+  <action name="action_Read_settings">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/download.png</normaloff>:/icons/icons/download.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Read from device</string>
+   </property>
+  </action>
+  <action name="action_Write_to_device">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/upload.png</normaloff>:/icons/icons/upload.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Write to device</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

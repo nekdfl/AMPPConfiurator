@@ -5,5 +5,12 @@
         <file>icons/network-receive.png</file>
         <file>icons/network-transmit.png</file>
         <file>icons/network-transmit-receive.png</file>
+        <file>icons/cmd.png</file>
+        <file>icons/download.png</file>
+        <file>icons/save.png</file>
+        <file>icons/upload.png</file>
+        <file>icons/broom48.png</file>
+        <file>icons/load.png</file>
+        <file>icons/power.png</file>
     </qresource>
 </RCC>

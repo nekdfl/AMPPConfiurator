@@ -33,7 +33,11 @@ class MathLogic : public QObject
     void addVal(const QString &a_name, const int &a_val);
     void addExtraVal(const QString &a_name, const int &a_val);
 
+    void sendValueToLCD();
+
     QList<QPair<QString, int>> getPairListFromBtree();
+
+    void clear();
 
   protected:
     NodeList_t m_bintree_lst;

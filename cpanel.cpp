@@ -2,11 +2,33 @@
 
 CPanel::CPanel(const QList<ConstructControlBlock> &controlBlockElements,
                const int &a_min, const int &a_max, QWidget *parent)
-    : QWidget(parent), m_constants(Constants::getInstance())
+    :  QWidget(parent),
+      m_controlBlockElements(controlBlockElements),
+      m_constants(Constants::getInstance())
+{
+
+    this->setMaximumHeight(m_constants.maxwindowheight);
+    m_hbox_qptr = new QHBoxLayout(this);
+    loadSettings(a_min, a_max);
+
+    setLayout(m_hbox_qptr);
+    setStyleSheet("QWidget {background: 'black'; background-color:'black';  "
+                  "color: 'white'}");
+
+    connectMathLogicToControlBlocks();
+    connectControlBlocksToMathLogic();
+}
+
+
+MathLogic *CPanel::getMathLogicInstance()
+{
+    return m_mathlogic_qptr.data();
+}
+
+void CPanel::loadSettings(const int &a_min, const int &a_max)
 {
     m_mathlogic_qptr = new MathLogic(a_min, a_max);
-    m_hbox_qptr = new QHBoxLayout(this);
-    for (auto &it : controlBlockElements)
+    for (auto &it : m_controlBlockElements)
     {
         auto ptr = new ControlBlock(this, it.getName(), it.getLabel(),
                                     it.getMintemperature(), it.getMaxTemperature(),
@@ -16,13 +38,25 @@ CPanel::CPanel(const QList<ConstructControlBlock> &controlBlockElements,
 
         addToMathLogic(it);
     }
+}
 
-    setLayout(m_hbox_qptr);
-    setStyleSheet("QWidget {background: 'black'; background-color:'black';  "
-                  "color: 'white'}");
+void CPanel::reloadSettings(const QList<ConstructControlBlock> &controlBlockElements)
+{
+    m_mathlogic_qptr->clear();
+    for (auto &it : controlBlockElements)
+    {
+        addToMathLogic(it);
+    }
+    updateControlBlocks();
+}
 
-    connectMathLogicToControlBlocks();
-    connectControlBlocksToMathLogic();
+void CPanel::updateControlBlocks()
+{
+    m_mathlogic_qptr->sendValueToLCD();
+    for (auto &it : m_controlblock_map)
+    {
+        it->onValueChanged();
+    }
 }
 
 void CPanel::connectControlBlocksToMathLogic()

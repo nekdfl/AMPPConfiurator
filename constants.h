@@ -8,9 +8,10 @@ class Constants
     ~Constants();
 
     const int minwindowwidth = 1024;
-    const int minwindowheight = 320;
+    const int minwindowheight = 360;
     const int maxwindowwidth = 1024;
-    const int maxwindowheight = 320;
+    const int maxwindowheight = 360;
+    const int consoleheght =360;
 
     const char *applicationversion = "0.1a";
     const char *organizationName = "Garkushenko Nick";

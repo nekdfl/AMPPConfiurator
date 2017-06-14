@@ -15,7 +15,9 @@ MainWindow::MainWindow(QWidget *parent)
     initCntrolBlockList();
     createGUI();
 
+    connect (ui->action_Show_hide_console, &QAction::triggered, this, &MainWindow::onShowHideConsoleAct);
     connect(ui->action_Preferances, &QAction::triggered, this, &MainWindow::onConfigureAct);
+    connect(ui->action_Save_as_default, &QAction::triggered, this, &MainWindow::onSaveDefaults);
     connect(ui->action_Load_default, &QAction::triggered, this, &MainWindow::onLoadDefaults);
     connect(ui->action_Quit, &QAction::triggered, this, &MainWindow::onQuitAct);
 }
@@ -75,7 +77,8 @@ void MainWindow::initCntrolBlockList()
     const int &alarmon = m_settings_qptr->value(m_constants.alarmon_name).toInt();
     const int &poweroff = m_settings_qptr->value(m_constants.poweroff_name).toInt();
 
-    m_cntrBlckList = {ConstructControlBlock(m_constants.cooloff_name, m_constants.cooloff_label, min, max, cooloff),
+    m_controlBlockElements.clear();
+    m_controlBlockElements = {ConstructControlBlock(m_constants.cooloff_name, m_constants.cooloff_label, min, max, cooloff),
                       ConstructControlBlock(m_constants.cool35_name, m_constants.cool35_label, min, max, cool35),
                       ConstructControlBlock(m_constants.cool50_name, m_constants.cool50_label, min, max, cool50),
                       ConstructControlBlock(m_constants.cool70_name, m_constants.cool70_label, min, max, cool70),
@@ -92,16 +95,33 @@ void MainWindow::createGUI()
     this->setMaximumSize(m_constants.maxwindowwidth, m_constants.maxwindowheight);
     this->setMinimumSize(m_constants.minwindowwidth, m_constants.minwindowheight);
 
-    QList<QToolBar *> toolbars = this->findChildren<QToolBar *>("maintoolBar");
-    for (auto &it : toolbars)
-    {
-        qDebug() << "toolbars: " << it->objectName()  ;
-    }
+//    auto vtoolbar = this->findChild<QToolBar *>("maintoolBar");
+//    if (vtoolbar)
+//    {
+//        qDebug() << "toolbars: " << vtoolbar->objectName()  ;
+//    }
 
+    m_console_qptr = new QTextEdit();
+    m_console_qptr->hide();
+    m_console_qptr->setReadOnly(true);
+    m_console_qptr->setCursorWidth(0);
+    m_console_qptr->setMaximumHeight(m_constants.consoleheght);
 
-    m_cpanel_qptr = new CPanel(m_cntrBlckList, m_settings_qptr->value(m_constants.mintemp_name).toInt(),
+    m_cpanel_qptr = new CPanel(m_controlBlockElements, m_settings_qptr->value(m_constants.mintemp_name).toInt(),
                                m_settings_qptr->value(m_constants.maxtemp_name).toInt());
-    setCentralWidget(m_cpanel_qptr);
+
+    m_mainwindow = new QWidget();
+    m_mainlayout_vb = new QVBoxLayout();
+    m_mainlayout_vb->setMargin(0);
+    m_mainwindow->setLayout(m_mainlayout_vb);
+
+
+    m_mainlayout_vb->addWidget(m_cpanel_qptr);
+    m_mainlayout_vb->addWidget(m_console_qptr);
+
+
+    setCentralWidget(m_mainwindow);
+
 }
 
 void MainWindow::onAboutAct()
@@ -111,23 +131,46 @@ void MainWindow::onAboutAct()
 
 void MainWindow::onClearConsoleAct()
 {
-
+    m_console_qptr->clear();
 }
 
 void MainWindow::onConfigureAct()
 {
-    m_settingsdialog_qptr = new SettingsDialog(m_settings_qptr.data(), m_cntrBlckList);
+    m_settingsdialog_qptr = new SettingsDialog(m_settings_qptr.data(), m_controlBlockElements);
     m_settingsdialog_qptr->exec();
+}
+
+void MainWindow::onSaveDefaults()
+{
+    auto vmathlogic= m_cpanel_qptr->getMathLogicInstance();
+    auto vtemperature_list = vmathlogic->getPairListFromBtree();
+    for (auto &it : vtemperature_list)
+    {
+        m_settings_qptr->setValue(it.first, it.second);
+    }
 }
 
 void MainWindow::onLoadDefaults()
 {
-    m_cpanel_qptr.clear();
-    m_cntrBlckList.clear();
-
     initSettings();
     initCntrolBlockList();
-    createGUI();
+    m_cpanel_qptr->reloadSettings(m_controlBlockElements);
+}
+
+void MainWindow::onShowHideConsoleAct()
+{
+    if (m_console_qptr->isVisible())
+    {
+        m_console_qptr->hide();
+        this->setMaximumHeight(m_constants.maxwindowheight);
+        this->setFixedHeight(this->maximumHeight());
+    }
+    else
+    {
+        m_console_qptr->show();
+        this->setMaximumHeight(m_constants.maxwindowheight + m_constants.consoleheght);
+        this->setFixedHeight(this->maximumHeight());
+    }
 }
 
 void MainWindow::onConnectAct()
@@ -137,10 +180,12 @@ void MainWindow::onConnectAct()
 
 void MainWindow::onDisconnecAct()
 {
+
 }
 
 void MainWindow::onHelpAct()
 {
+
 }
 
 void MainWindow::onQuitAct()

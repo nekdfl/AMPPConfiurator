@@ -21,6 +21,19 @@ void MathLogic::addExtraVal(const QString &a_name, const int &a_val)
     m_extraval_map.insert(a_name, node);
 }
 
+void MathLogic::sendValueToLCD()
+{
+    recalcExtraVal();
+
+    send_signal();
+}
+
+void MathLogic::clear()
+{
+    m_bintree_lst.clear();
+    m_extraval_map.clear();
+}
+
 void MathLogic::updateBintree(const QString &a_name, const int &a_val)
 {
     qWarning() << "==============================================";
