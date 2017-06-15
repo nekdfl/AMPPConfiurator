@@ -10,6 +10,7 @@
 
 #include <QDebug>
 
+#include "constants.h"
 #include "node.h"
 
 class MathLogic : public QObject
@@ -18,13 +19,13 @@ class MathLogic : public QObject
   private:
     typedef QList<Node> NodeList_t;
     typedef QMap<QString, Node> ExtraNodeMap_t;
-    const char *cooloff = "cooloff";
-    const char *alarmoff = "alarmoff";
-    const char *alarmon = "alarmon";
-    const char *poweroff = "poweroff";
-    const char *cool70 = "cool70";
-    const char *cool90 = "cool90";
-    const char *cool100 = "cool100";
+    const char *cooloff = Constants::getInstance().cooloff_name;
+    const char *alarmoff = Constants::getInstance().alarmoff_name;
+    const char *alarmon = Constants::getInstance().alarmon_name;
+    const char *poweroff = Constants::getInstance().poweroff_name;
+    const char *cool70 = Constants::getInstance().cool70_name;
+    const char *cool90 = Constants::getInstance().cool90_name;
+    const char *cool100 = Constants::getInstance().cool100_name;
 
   public:
     explicit MathLogic(const int &a_min, const int &a_max);
@@ -68,8 +69,7 @@ class MathLogic : public QObject
     void extraValueReady(const ExtraNodeMap_t &a_vallist);
 
   public slots:
-    void
-    onDialMoved(const QString &a_name, const int &a_val)
+    void onDialMoved(const QString &a_name, const int &a_val)
     {
         //        qWarning() << " ";
         //        qDebug() << "moved: " << a_name << ": " <<a_val;

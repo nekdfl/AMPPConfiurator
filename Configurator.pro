@@ -32,7 +32,8 @@ SOURCES += main.cpp\
     cpanel.cpp \
     settingsdialog.cpp \
     constants.cpp \
-    temperatureblock.cpp
+    temperatureblock.cpp \
+    comportprocessor.cpp
 
 HEADERS  += mainwindow.h \
     controlblock.h \
@@ -43,7 +44,8 @@ HEADERS  += mainwindow.h \
     settingsdialog.h \
     constants.h \
     temperatureblock.h \
-    node.h
+    node.h \
+    comportprocessor.h
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui

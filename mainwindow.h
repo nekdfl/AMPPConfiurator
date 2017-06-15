@@ -9,9 +9,9 @@
 #include <QTextEdit>
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
-
 #include <QPointer>
 
+#include "comportprocessor.h"
 #include "constants.h"
 #include "cpanel.h"
 #include "settingsdialog.h"
@@ -37,12 +37,11 @@ class MainWindow : public QMainWindow
     inline void initSettings();
     inline void initCntrolBlockList();
     inline void createGUI();
+    inline void createComPortProcessor();
 
     void resizeEvent(QResizeEvent *event);
 
   private:
-    // constants
-
     // vars
     Ui::MainWindow *ui;
 
@@ -52,7 +51,7 @@ class MainWindow : public QMainWindow
     QPointer<QTextEdit> m_console_qptr;
     QPointer<QSettings> m_settings_qptr;
     QPointer<SettingsDialog> m_settingsdialog_qptr;
-    QPointer<QSerialPort> m_serialport;
+    QPointer<ComPortProcessor> m_comportprocessor_qptr;
     QList<ConstructControlBlock> m_controlBlockElements;
     const Constants &m_constants;
 
@@ -70,6 +69,9 @@ class MainWindow : public QMainWindow
     void onClearConsoleAct();
     void onHelpAct();
     void onAboutAct();
+
+    void onDataRecieved(QByteArray a_recievbuff);
+    void onDataTransfered(QByteArray a_recievbuff);
 };
 
 #endif // MAINWINDOW_H

@@ -20,6 +20,7 @@ class CPanel : public QWidget
 
     MathLogic* getMathLogicInstance();
     void reloadSettings(const QList<ConstructControlBlock> &controlBlockElements);
+    void setPresetValue(const QList<QPair<QString, int>> &a_vallist);
 
   protected:
     QList<ConstructControlBlock> m_controlBlockElements;

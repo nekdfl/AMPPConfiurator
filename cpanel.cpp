@@ -50,6 +50,17 @@ void CPanel::reloadSettings(const QList<ConstructControlBlock> &controlBlockElem
     updateControlBlocks();
 }
 
+void CPanel::setPresetValue(const QList<QPair<QString, int> > &a_vallist)
+{
+    for (auto &it : a_vallist)
+    {
+        m_mathlogic_qptr->onDialMoved(it.first, it.second);
+//        m_controlblock_map[it.first]->onValueChange(it.second);
+        m_controlblock_map[it.first]->onValueChanged();
+
+    }
+}
+
 void CPanel::updateControlBlocks()
 {
     m_mathlogic_qptr->sendValueToLCD();
@@ -95,3 +106,5 @@ void CPanel::addToMathLogic(auto &it)
     else
         m_mathlogic_qptr->addVal(it.getName(), it.getDefTemperature());
 }
+
+

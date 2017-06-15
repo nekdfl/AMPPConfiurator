@@ -1,7 +1,8 @@
 #include "mathlogic.h"
 
 MathLogic::MathLogic(const int &a_min, const int &a_max)
-    : m_min(a_min), m_max(a_max)
+    : m_min(a_min),
+      m_max(a_max)
 {
 }
 

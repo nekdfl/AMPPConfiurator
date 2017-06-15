@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     QCoreApplication::setApplicationName(m_constants.applicationname);
 
     initSettings();
+    createComPortProcessor();
     ui->setupUi(this);
 
     initCntrolBlockList();
@@ -30,10 +31,10 @@ MainWindow::~MainWindow()
 void MainWindow::initSettings()
 {
     // init settings to default values; For future may be save in file.
-
+    qDebug() << "config path: " << QDir::currentPath() + "/" + m_constants.configfilename;
     m_settings_qptr = new QSettings(QDir::currentPath() + "/" + m_constants.configfilename, QSettings::IniFormat);
 
-    qDebug() << "config path: " << QDir::currentPath() + "/" + m_constants.configfilename;
+
 
     const int min = m_settings_qptr->value(m_constants.mintemp_name, m_constants.mintemp).toInt();
     const int max = m_settings_qptr->value(m_constants.maxtemp_name, m_constants.maxtemp).toInt();
@@ -124,6 +125,13 @@ void MainWindow::createGUI()
 
 }
 
+void MainWindow::createComPortProcessor()
+{
+    m_comportprocessor_qptr = new ComPortProcessor();
+    connect(m_comportprocessor_qptr, &ComPortProcessor::dataRecived, this, &MainWindow::onDataRecieved) ;
+    connect(m_comportprocessor_qptr, &ComPortProcessor::dataTransfered, this, &MainWindow::onDataTransfered);
+}
+
 void MainWindow::onAboutAct()
 {
 
@@ -163,24 +171,26 @@ void MainWindow::onShowHideConsoleAct()
     {
         m_console_qptr->hide();
         this->setMaximumHeight(m_constants.maxwindowheight);
-        this->setFixedHeight(this->maximumHeight());
+        this->resize(m_constants.maxwindowwidth, this->maximumHeight());
     }
     else
     {
         m_console_qptr->show();
         this->setMaximumHeight(m_constants.maxwindowheight + m_constants.consoleheght);
-        this->setFixedHeight(this->maximumHeight());
+        this->resize(m_constants.maxwindowwidth, this->maximumHeight());
     }
 }
 
 void MainWindow::onConnectAct()
 {
-
+    auto comportname = m_settings_qptr->value(m_constants.comport_name).toString();
+    m_comportprocessor_qptr->setComportName(comportname);
+    m_comportprocessor_qptr->open();
 }
 
 void MainWindow::onDisconnecAct()
 {
-
+    m_comportprocessor_qptr->close();
 }
 
 void MainWindow::onHelpAct()
@@ -191,6 +201,16 @@ void MainWindow::onHelpAct()
 void MainWindow::onQuitAct()
 {
     this->close();
+}
+
+void MainWindow::onDataRecieved(QByteArray a_recievbuff)
+{
+    m_console_qptr->append(a_recievbuff);
+}
+
+void MainWindow::onDataTransfered(QByteArray a_recievbuff)
+{
+    m_console_qptr->append(a_recievbuff);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
