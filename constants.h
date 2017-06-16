@@ -7,11 +7,18 @@ class Constants
     static Constants &getInstance();
     ~Constants();
 
+    const int readtimeout_ms = 1000;
+    const int writetimeout_ms = 1000;
+
     const int minwindowwidth = 1024;
     const int minwindowheight = 360;
     const int maxwindowwidth = 1024;
     const int maxwindowheight = 360;
     const int consoleheght =360;
+
+    const char *connected_port_msg= "Connected to comport: ";
+    const char *connected_speed_msg= " with boudrate: ";
+    const char *disconnected_msg= "Disconnected";
 
     const char *applicationversion = "0.1a";
     const char *organizationName = "Garkushenko Nick";

@@ -6,7 +6,7 @@
 #include <QSettings>
 #include <QWidget>
 #include <QtGui>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 #include <QPointer>
@@ -38,6 +38,12 @@ class MainWindow : public QMainWindow
     inline void initCntrolBlockList();
     inline void createGUI();
     inline void createComPortProcessor();
+    inline void initQActionConnections();
+    inline void initControlsState();
+    inline void enableControls();
+    inline void disableControls();
+    inline void updateStatusBar();
+    inline void addComportComBoxToToolBar();
 
     void resizeEvent(QResizeEvent *event);
 
@@ -48,28 +54,35 @@ class MainWindow : public QMainWindow
     QPointer<QWidget> m_mainwindow;
     QPointer<QVBoxLayout> m_mainlayout_vb;
     QPointer<CPanel> m_cpanel_qptr;
-    QPointer<QTextEdit> m_console_qptr;
+    QPointer<QPlainTextEdit> m_console_qptr;
+    QPointer<QLabel> m_status_lbl;
     QPointer<QSettings> m_settings_qptr;
     QPointer<SettingsDialog> m_settingsdialog_qptr;
     QPointer<ComPortProcessor> m_comportprocessor_qptr;
     QList<ConstructControlBlock> m_controlBlockElements;
+
     const Constants &m_constants;
 
     QPointer<QComboBox> m_serialport_cbb;
 
   private slots:
     // menu action
-    void onConnectAct();
-    void onDisconnecAct();
-    void onQuitAct();
     void onConfigureAct();
-    void onSaveDefaults();
-    void onLoadDefaults();
-    void onShowHideConsoleAct();
-    void onClearConsoleAct();
     void onHelpAct();
     void onAboutAct();
+    //menu and tool bar
+    void onConnectAct();
+    void onDisconnecAct();
+    void onShowHideConsoleAct();
+    void onClearConsoleAct();
+    void onSaveDefaults();
+    void onLoadDefaults();
+    void onReadFromDevice();
+    void onWriteToDevice();
+    void onQuitAct();
 
+
+    //comport events
     void onDataRecieved(QByteArray a_recievbuff);
     void onDataTransfered(QByteArray a_recievbuff);
 };

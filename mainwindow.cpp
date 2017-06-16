@@ -15,12 +15,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     initCntrolBlockList();
     createGUI();
-
-    connect (ui->action_Show_hide_console, &QAction::triggered, this, &MainWindow::onShowHideConsoleAct);
-    connect(ui->action_Preferances, &QAction::triggered, this, &MainWindow::onConfigureAct);
-    connect(ui->action_Save_as_default, &QAction::triggered, this, &MainWindow::onSaveDefaults);
-    connect(ui->action_Load_default, &QAction::triggered, this, &MainWindow::onLoadDefaults);
-    connect(ui->action_Quit, &QAction::triggered, this, &MainWindow::onQuitAct);
+    initQActionConnections();
+    initControlsState();
 }
 
 MainWindow::~MainWindow()
@@ -96,17 +92,15 @@ void MainWindow::createGUI()
     this->setMaximumSize(m_constants.maxwindowwidth, m_constants.maxwindowheight);
     this->setMinimumSize(m_constants.minwindowwidth, m_constants.minwindowheight);
 
-//    auto vtoolbar = this->findChild<QToolBar *>("maintoolBar");
-//    if (vtoolbar)
-//    {
-//        qDebug() << "toolbars: " << vtoolbar->objectName()  ;
-//    }
-
-    m_console_qptr = new QTextEdit();
+    m_console_qptr = new QPlainTextEdit();
+    QPalette pal = palette();
+    pal.setColor(QPalette::Base, Qt::black);
+    pal.setColor(QPalette::Text, Qt::green);
     m_console_qptr->hide();
     m_console_qptr->setReadOnly(true);
     m_console_qptr->setCursorWidth(0);
     m_console_qptr->setMaximumHeight(m_constants.consoleheght);
+    m_console_qptr->setPalette(pal);
 
     m_cpanel_qptr = new CPanel(m_controlBlockElements, m_settings_qptr->value(m_constants.mintemp_name).toInt(),
                                m_settings_qptr->value(m_constants.maxtemp_name).toInt());
@@ -116,13 +110,14 @@ void MainWindow::createGUI()
     m_mainlayout_vb->setMargin(0);
     m_mainwindow->setLayout(m_mainlayout_vb);
 
-
     m_mainlayout_vb->addWidget(m_cpanel_qptr);
     m_mainlayout_vb->addWidget(m_console_qptr);
 
-
     setCentralWidget(m_mainwindow);
 
+    m_status_lbl = new QLabel("");
+    ui->statusBar->addWidget(m_status_lbl);
+    updateStatusBar();
 }
 
 void MainWindow::createComPortProcessor()
@@ -132,20 +127,130 @@ void MainWindow::createComPortProcessor()
     connect(m_comportprocessor_qptr, &ComPortProcessor::dataTransfered, this, &MainWindow::onDataTransfered);
 }
 
-void MainWindow::onAboutAct()
+void MainWindow::initQActionConnections()
 {
+    connect(ui->action_Preferances, &QAction::triggered, this, &MainWindow::onConfigureAct);
+
+    connect(ui->action_Connect, &QAction::triggered, this , & MainWindow::onConnectAct);
+    connect(ui->action_Disconnect, &QAction::triggered, this , & MainWindow::onDisconnecAct);
+    connect (ui->action_Show_hide_console, &QAction::triggered, this, &MainWindow::onShowHideConsoleAct);
+    connect (ui->action_Clear_console, &QAction::triggered, this, &MainWindow::onClearConsoleAct);
+    connect(ui->action_Save_as_default, &QAction::triggered, this, &MainWindow::onSaveDefaults);
+    connect(ui->action_Load_default, &QAction::triggered, this, &MainWindow::onLoadDefaults);
+    connect(ui->action_Read_from_device, &QAction::triggered, this, &MainWindow::onReadFromDevice);
+    connect(ui->action_Write_to_device, &QAction::triggered, this, &MainWindow::onWriteToDevice);
+    connect(ui->action_Quit, &QAction::triggered, this, &MainWindow::onQuitAct);
+}
+
+void MainWindow::initControlsState()
+{
+    m_cpanel_qptr->setEnabled(false);
+    ui->action_Disconnect->setEnabled(false);
+    ui->action_Clear_console->setEnabled(false);
+    ui->action_Save_as_default->setEnabled(false);
+    ui->action_Load_default->setEnabled(false);
+    ui->action_Read_from_device->setEnabled(false);
+    ui->action_Write_to_device->setEnabled(false);
 
 }
 
-void MainWindow::onClearConsoleAct()
+void MainWindow::enableControls()
 {
-    m_console_qptr->clear();
+    ui->action_Connect->setEnabled(false);
+    ui->action_Disconnect->setEnabled(true);
+    m_cpanel_qptr->setEnabled(true);
+    m_console_qptr->setEnabled(true);
+    ui->action_Disconnect->setEnabled(true);
+    ui->action_Clear_console->setEnabled(true);
+    ui->action_Save_as_default->setEnabled(true);
+    ui->action_Load_default->setEnabled(true);
+    ui->action_Read_from_device->setEnabled(true);
+    ui->action_Write_to_device->setEnabled(true);
+
+}
+
+void MainWindow::disableControls()
+{
+    ui->action_Connect->setEnabled(true);
+    ui->action_Disconnect->setEnabled(false);
+    m_cpanel_qptr->setEnabled(false);
+    m_console_qptr->setEnabled(false);
+    ui->action_Disconnect->setEnabled(false);
+    ui->action_Clear_console->setEnabled(false);
+    ui->action_Save_as_default->setEnabled(false);
+    ui->action_Load_default->setEnabled(false);
+    ui->action_Read_from_device->setEnabled(false);
+    ui->action_Write_to_device->setEnabled(false);
+
+}
+
+void MainWindow::updateStatusBar()
+{
+    m_status_lbl->setText( m_comportprocessor_qptr->getStatus());
+}
+
+void MainWindow::addComportComBoxToToolBar()
+{
+    //    auto vtoolbar = this->findChild<QToolBar *>("maintoolBar");
+    //    if (vtoolbar)
+    //    {
+    //        qDebug() << "toolbars: " << vtoolbar->objectName()  ;
+    //    }
 }
 
 void MainWindow::onConfigureAct()
 {
     m_settingsdialog_qptr = new SettingsDialog(m_settings_qptr.data(), m_controlBlockElements);
     m_settingsdialog_qptr->exec();
+}
+
+void MainWindow::onHelpAct()
+{
+
+}
+
+void MainWindow::onAboutAct()
+{
+
+}
+
+void MainWindow::onConnectAct()
+{
+    auto comportname = m_settings_qptr->value(m_constants.comport_name).toString();
+    m_comportprocessor_qptr->setComportName(comportname);
+    m_comportprocessor_qptr->open();
+    updateStatusBar();
+    enableControls();
+}
+
+void MainWindow::onDisconnecAct()
+{
+    m_comportprocessor_qptr->close();
+    updateStatusBar();
+    disableControls();
+}
+
+void MainWindow::onShowHideConsoleAct()
+{
+    if (m_console_qptr->isVisible())
+    {
+        m_console_qptr->hide();
+        this->setMaximumHeight(m_constants.maxwindowheight);
+        this->resize(m_constants.maxwindowwidth, this->maximumHeight());
+        ui->action_Clear_console->setEnabled(false);
+    }
+    else
+    {
+        m_console_qptr->show();
+        this->setMaximumHeight(m_constants.maxwindowheight + m_constants.consoleheght);
+        this->resize(m_constants.maxwindowwidth, this->maximumHeight());
+        ui->action_Clear_console->setEnabled(true);
+    }
+}
+
+void MainWindow::onClearConsoleAct()
+{
+    m_console_qptr->clear();
 }
 
 void MainWindow::onSaveDefaults()
@@ -165,37 +270,15 @@ void MainWindow::onLoadDefaults()
     m_cpanel_qptr->reloadSettings(m_controlBlockElements);
 }
 
-void MainWindow::onShowHideConsoleAct()
+void MainWindow::onReadFromDevice()
 {
-    if (m_console_qptr->isVisible())
-    {
-        m_console_qptr->hide();
-        this->setMaximumHeight(m_constants.maxwindowheight);
-        this->resize(m_constants.maxwindowwidth, this->maximumHeight());
-    }
-    else
-    {
-        m_console_qptr->show();
-        this->setMaximumHeight(m_constants.maxwindowheight + m_constants.consoleheght);
-        this->resize(m_constants.maxwindowwidth, this->maximumHeight());
-    }
+    m_comportprocessor_qptr->requestPresetValue();
 }
 
-void MainWindow::onConnectAct()
+void MainWindow::onWriteToDevice()
 {
-    auto comportname = m_settings_qptr->value(m_constants.comport_name).toString();
-    m_comportprocessor_qptr->setComportName(comportname);
-    m_comportprocessor_qptr->open();
-}
-
-void MainWindow::onDisconnecAct()
-{
-    m_comportprocessor_qptr->close();
-}
-
-void MainWindow::onHelpAct()
-{
-
+    auto vmathlogic= m_cpanel_qptr->getMathLogicInstance();
+    m_comportprocessor_qptr->sendPresetValue(vmathlogic->getPairListFromBtree());
 }
 
 void MainWindow::onQuitAct()
@@ -205,12 +288,14 @@ void MainWindow::onQuitAct()
 
 void MainWindow::onDataRecieved(QByteArray a_recievbuff)
 {
-    m_console_qptr->append(a_recievbuff);
+    m_console_qptr->insertPlainText("<<");
+    m_console_qptr->insertPlainText(a_recievbuff);
 }
 
 void MainWindow::onDataTransfered(QByteArray a_recievbuff)
 {
-    m_console_qptr->append(a_recievbuff);
+    m_console_qptr->insertPlainText(">>");
+    m_console_qptr->insertPlainText(a_recievbuff);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)

@@ -7,6 +7,10 @@
 #include <QString>
 #include <QQueue>
 #include <QTimer>
+#include <QThread>
+#include <QDebug>
+
+#include "constants.h"
 
 class ComPortProcessor: public QObject
 {
@@ -14,12 +18,13 @@ class ComPortProcessor: public QObject
 public:
     explicit ComPortProcessor();
     ~ComPortProcessor();
-    ComPortProcessor(QString a_comportname);
-    void setComportName(QString a_comportname);
+    ComPortProcessor(const QString &a_comportname);
+    void setComportName(const QString & a_comportname);
     void open();
     void close();
     void requestPresetValue();
-    void sendPresetValue();
+    void sendPresetValue(QList<QPair<QString, int>> a_vallist);
+    QString getStatus();
 
 protected:
     QByteArray m_writedata;
@@ -27,24 +32,19 @@ protected:
     qint64 m_byteswritten;
     QPointer<QSerialPort> m_serialport;
     QTimer m_pingpongtimer;
-    QString m_comportname;
-
-protected:
-    void onRead();
 
 private:
     void write(const QByteArray &writeData);
+    QByteArray read();
+    void parseResponse(const QByteArray& a_recievbuff);
 
 signals:
     void dataRecived(QByteArray a_recievbuff );
     void dataTransfered(QByteArray a_transfbuff);
     void presetValueReady(const QList<QPair<QString, int>> &a_vallist);
 
- private slots:
-    void handleBytesWritten(qint64 bytes);
-    void handleBytesRead(qint64 bytes);
-    void handleTimeout();
-    void handleError(QSerialPort::SerialPortError error);
+private slots:
+
 
 };
 

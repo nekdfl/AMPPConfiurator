@@ -44,7 +44,7 @@
     <addaction name="action_Connect"/>
     <addaction name="action_Disconnect"/>
     <addaction name="separator"/>
-    <addaction name="action_Read_settings"/>
+    <addaction name="action_Read_from_device"/>
     <addaction name="action_Write_to_device"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
@@ -93,10 +93,10 @@
    <addaction name="action_Show_hide_console"/>
    <addaction name="action_Clear_console"/>
    <addaction name="separator"/>
-   <addaction name="action_Save_as_default"/>
    <addaction name="action_Load_default"/>
+   <addaction name="action_Save_as_default"/>
    <addaction name="separator"/>
-   <addaction name="action_Read_settings"/>
+   <addaction name="action_Read_from_device"/>
    <addaction name="action_Write_to_device"/>
    <addaction name="action_Quit"/>
   </widget>
@@ -179,7 +179,7 @@
     <string>Save as default</string>
    </property>
   </action>
-  <action name="action_Read_settings">
+  <action name="action_Read_from_device">
    <property name="icon">
     <iconset resource="icons.qrc">
      <normaloff>:/icons/icons/download.png</normaloff>:/icons/icons/download.png</iconset>
