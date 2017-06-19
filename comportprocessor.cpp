@@ -182,15 +182,15 @@ void ComPortProcessor::parseResponse(const QByteArray &a_recievbuff)
     auto str = stringlist[2];
     QVector<QByteArray> values = str.split('|').toVector();
 
-    vallist.push_back(QPair<QString, int>(constants.cooloff_name, std::atoi(values[0].data())));
-    vallist.push_back(QPair<QString, int>(constants.cool35_name, std::atoi(values[1].data())));
-    vallist.push_back(QPair<QString, int>(constants.cool50_name, std::atoi(values[2].data())));
-    vallist.push_back(QPair<QString, int>(constants.cool70_name, std::atoi(values[3].data())));
-    vallist.push_back(QPair<QString, int>(constants.cool90_name, std::atoi(values[4].data())));
-    vallist.push_back(QPair<QString, int>(constants.cool100_name, std::atoi(values[5].data())));
-    vallist.push_back(QPair<QString, int>(constants.alarmon_name, std::atoi(values[6].data())));
-    vallist.push_back(QPair<QString, int>(constants.alarmoff_name, std::atoi(values[7].data())));
-    vallist.push_back(QPair<QString, int>(constants.poweroff_name, std::atoi(values[8].data())));
+    vallist.push_back(QPair<QString, int>(constants.cooloff_key, std::atoi(values[0].data())));
+    vallist.push_back(QPair<QString, int>(constants.cool35_key, std::atoi(values[1].data())));
+    vallist.push_back(QPair<QString, int>(constants.cool50_ley, std::atoi(values[2].data())));
+    vallist.push_back(QPair<QString, int>(constants.cool70_key, std::atoi(values[3].data())));
+    vallist.push_back(QPair<QString, int>(constants.cool90_key, std::atoi(values[4].data())));
+    vallist.push_back(QPair<QString, int>(constants.cool100_key, std::atoi(values[5].data())));
+    vallist.push_back(QPair<QString, int>(constants.alarmon_key, std::atoi(values[6].data())));
+    vallist.push_back(QPair<QString, int>(constants.alarmoff_key, std::atoi(values[7].data())));
+    vallist.push_back(QPair<QString, int>(constants.poweroff_key, std::atoi(values[8].data())));
 
     emit presetValueReady(vallist);
 }

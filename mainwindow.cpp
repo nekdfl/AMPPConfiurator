@@ -33,58 +33,58 @@ void MainWindow::initSettings()
     qDebug() << "config path: " << QDir::currentPath() + "/" + m_constants.configfilename;
     m_settings_qptr = new QSettings(QDir::currentPath() + "/" + m_constants.configfilename, QSettings::IniFormat);
 
-    const int min = m_settings_qptr->value(m_constants.mintemp_name, m_constants.mintemp).toInt();
-    const int max = m_settings_qptr->value(m_constants.maxtemp_name, m_constants.maxtemp).toInt();
+    const int min = m_settings_qptr->value(m_constants.mintemp_key, m_constants.mintemp).toInt();
+    const int max = m_settings_qptr->value(m_constants.maxtemp_key, m_constants.maxtemp).toInt();
 
-    const int cooloff = m_settings_qptr->value(m_constants.cooloff_name, m_constants.cooloff).toInt();
-    const int cool35 = m_settings_qptr->value(m_constants.cool35_name, m_constants.cool35).toInt();
-    const int cool50 = m_settings_qptr->value(m_constants.cool50_name, m_constants.cool50).toInt();
-    const int cool70 = m_settings_qptr->value(m_constants.cool70_name, m_constants.cool70).toInt();
-    const int cool90 = m_settings_qptr->value(m_constants.cool90_name, m_constants.cool90).toInt();
-    const int cool100 = m_settings_qptr->value(m_constants.cool100_name, m_constants.cool100).toInt();
-    const int alarmoff = m_settings_qptr->value(m_constants.alarmoff_name, m_constants.alarmoff).toInt();
-    const int alarmon = m_settings_qptr->value(m_constants.alarmon_name, m_constants.alarmon).toInt();
-    const int poweroff = m_settings_qptr->value(m_constants.poweroff_name, m_constants.poweroff).toInt();
+    const int cooloff = m_settings_qptr->value(m_constants.cooloff_key, m_constants.cooloff).toInt();
+    const int cool35 = m_settings_qptr->value(m_constants.cool35_key, m_constants.cool35).toInt();
+    const int cool50 = m_settings_qptr->value(m_constants.cool50_ley, m_constants.cool50).toInt();
+    const int cool70 = m_settings_qptr->value(m_constants.cool70_key, m_constants.cool70).toInt();
+    const int cool90 = m_settings_qptr->value(m_constants.cool90_key, m_constants.cool90).toInt();
+    const int cool100 = m_settings_qptr->value(m_constants.cool100_key, m_constants.cool100).toInt();
+    const int alarmoff = m_settings_qptr->value(m_constants.alarmoff_key, m_constants.alarmoff).toInt();
+    const int alarmon = m_settings_qptr->value(m_constants.alarmon_key, m_constants.alarmon).toInt();
+    const int poweroff = m_settings_qptr->value(m_constants.poweroff_key, m_constants.poweroff).toInt();
 
-    m_settings_qptr->setValue(m_constants.mintemp_name, min);
-    m_settings_qptr->setValue(m_constants.maxtemp_name, max);
+    m_settings_qptr->setValue(m_constants.mintemp_key, min);
+    m_settings_qptr->setValue(m_constants.maxtemp_key, max);
 
-    m_settings_qptr->setValue(m_constants.cooloff_name, cooloff);
-    m_settings_qptr->setValue(m_constants.cool35_name, cool35);
-    m_settings_qptr->setValue(m_constants.cool50_name, cool50);
-    m_settings_qptr->setValue(m_constants.cool70_name, cool70);
-    m_settings_qptr->setValue(m_constants.cool90_name, cool90);
-    m_settings_qptr->setValue(m_constants.cool100_name, cool100);
-    m_settings_qptr->setValue(m_constants.alarmoff_name, alarmoff);
-    m_settings_qptr->setValue(m_constants.alarmon_name, alarmon);
-    m_settings_qptr->setValue(m_constants.poweroff_name, poweroff);
+    m_settings_qptr->setValue(m_constants.cooloff_key, cooloff);
+    m_settings_qptr->setValue(m_constants.cool35_key, cool35);
+    m_settings_qptr->setValue(m_constants.cool50_ley, cool50);
+    m_settings_qptr->setValue(m_constants.cool70_key, cool70);
+    m_settings_qptr->setValue(m_constants.cool90_key, cool90);
+    m_settings_qptr->setValue(m_constants.cool100_key, cool100);
+    m_settings_qptr->setValue(m_constants.alarmoff_key, alarmoff);
+    m_settings_qptr->setValue(m_constants.alarmon_key, alarmon);
+    m_settings_qptr->setValue(m_constants.poweroff_key, poweroff);
 }
 
 void MainWindow::initCntrolBlockList()
 {
-    const int &min = m_settings_qptr->value(m_constants.mintemp_name).toInt();
-    const int &max = m_settings_qptr->value(m_constants.maxtemp_name).toInt();
+    const int &min = m_settings_qptr->value(m_constants.mintemp_key).toInt();
+    const int &max = m_settings_qptr->value(m_constants.maxtemp_key).toInt();
 
-    const int &cooloff = m_settings_qptr->value(m_constants.cooloff_name).toInt();
-    const int &cool35 = m_settings_qptr->value(m_constants.cool35_name).toInt();
-    const int &cool50 = m_settings_qptr->value(m_constants.cool50_name).toInt();
-    const int &cool70 = m_settings_qptr->value(m_constants.cool70_name).toInt();
-    const int &cool90 = m_settings_qptr->value(m_constants.cool90_name).toInt();
-    const int &cool100 = m_settings_qptr->value(m_constants.cool100_name).toInt();
-    const int &alarmoff = m_settings_qptr->value(m_constants.alarmoff_name).toInt();
-    const int &alarmon = m_settings_qptr->value(m_constants.alarmon_name).toInt();
-    const int &poweroff = m_settings_qptr->value(m_constants.poweroff_name).toInt();
+    const int &cooloff = m_settings_qptr->value(m_constants.cooloff_key).toInt();
+    const int &cool35 = m_settings_qptr->value(m_constants.cool35_key).toInt();
+    const int &cool50 = m_settings_qptr->value(m_constants.cool50_ley).toInt();
+    const int &cool70 = m_settings_qptr->value(m_constants.cool70_key).toInt();
+    const int &cool90 = m_settings_qptr->value(m_constants.cool90_key).toInt();
+    const int &cool100 = m_settings_qptr->value(m_constants.cool100_key).toInt();
+    const int &alarmoff = m_settings_qptr->value(m_constants.alarmoff_key).toInt();
+    const int &alarmon = m_settings_qptr->value(m_constants.alarmon_key).toInt();
+    const int &poweroff = m_settings_qptr->value(m_constants.poweroff_key).toInt();
 
     m_controlBlockElements.clear();
-    m_controlBlockElements = {ConstructControlBlock(m_constants.cooloff_name, m_constants.cooloff_label, min, max, cooloff),
-                              ConstructControlBlock(m_constants.cool35_name, m_constants.cool35_label, min, max, cool35),
-                              ConstructControlBlock(m_constants.cool50_name, m_constants.cool50_label, min, max, cool50),
-                              ConstructControlBlock(m_constants.cool70_name, m_constants.cool70_label, min, max, cool70),
-                              ConstructControlBlock(m_constants.cool90_name, m_constants.cool90_label, min, max, cool90),
-                              ConstructControlBlock(m_constants.cool100_name, m_constants.cool100_label, min, max, cool100),
-                              ConstructControlBlock(m_constants.alarmoff_name, m_constants.alarmoff_label, min, max, alarmoff),
-                              ConstructControlBlock(m_constants.alarmon_name, m_constants.alarmon_label, min, max, alarmon),
-                              ConstructControlBlock(m_constants.poweroff_name, m_constants.poweroff_label, min, max, poweroff)};
+    m_controlBlockElements = {ConstructControlBlock(m_constants.cooloff_key, m_constants.cooloff_label, min, max, cooloff),
+                              ConstructControlBlock(m_constants.cool35_key, m_constants.cool35_label, min, max, cool35),
+                              ConstructControlBlock(m_constants.cool50_ley, m_constants.cool50_label, min, max, cool50),
+                              ConstructControlBlock(m_constants.cool70_key, m_constants.cool70_label, min, max, cool70),
+                              ConstructControlBlock(m_constants.cool90_key, m_constants.cool90_label, min, max, cool90),
+                              ConstructControlBlock(m_constants.cool100_key, m_constants.cool100_label, min, max, cool100),
+                              ConstructControlBlock(m_constants.alarmoff_key, m_constants.alarmoff_label, min, max, alarmoff),
+                              ConstructControlBlock(m_constants.alarmon_key, m_constants.alarmon_label, min, max, alarmon),
+                              ConstructControlBlock(m_constants.poweroff_key, m_constants.poweroff_label, min, max, poweroff)};
 }
 
 void MainWindow::createGUI()
@@ -110,8 +110,8 @@ void MainWindow::createGUI()
     m_console_qptr->setMaximumHeight(m_constants.consoleheght);
     m_console_qptr->setPalette(pal);
 
-    m_cpanel_qptr = new CPanel(m_controlBlockElements, m_settings_qptr->value(m_constants.mintemp_name).toInt(),
-                               m_settings_qptr->value(m_constants.maxtemp_name).toInt());
+    m_cpanel_qptr = new CPanel(m_controlBlockElements, m_settings_qptr->value(m_constants.mintemp_key).toInt(),
+                               m_settings_qptr->value(m_constants.maxtemp_key).toInt());
 
     m_mainwindow = new QWidget();
     m_mainlayout_vb = new QVBoxLayout();
@@ -222,6 +222,7 @@ void MainWindow::onConfigureAct()
 
 void MainWindow::onHelpAct()
 {
+    QMessageBox::information(this, m_constants.help_title, m_constants.help_text, QMessageBox::Ok);
 }
 
 void MainWindow::onAboutAct()
@@ -233,7 +234,7 @@ void MainWindow::onConnectAct()
 {
     try
     {
-        auto comportname = m_settings_qptr->value(m_constants.comport_name).toString();
+        auto comportname = m_settings_qptr->value(m_constants.comport_key).toString();
         m_comportprocessor_qptr->setComportName(comportname);
         m_comportprocessor_qptr->open();
         updateStatusBar();

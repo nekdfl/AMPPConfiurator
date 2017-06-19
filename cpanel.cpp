@@ -98,9 +98,9 @@ void CPanel::connectMathLogicToControlBlocks()
 
 void CPanel::addToMathLogic(auto &it)
 {
-    if (it.getName() == m_constants.alarmoff_name ||
-        it.getName() == m_constants.alarmon_name ||
-        it.getName() == m_constants.poweroff_name)
+    if (it.getName() == m_constants.alarmoff_key ||
+        it.getName() == m_constants.alarmon_key ||
+        it.getName() == m_constants.poweroff_key)
         m_mathlogic_qptr->addExtraVal(it.getName(), it.getDefTemperature());
     else
         m_mathlogic_qptr->addVal(it.getName(), it.getDefTemperature());

@@ -24,6 +24,9 @@ The source code can be downloaded from\n\
 https://github.com/nekdfl/AMPPConfiurator.\n\
 Author: Garkushenko Nikolai Sergeevich.";
 
+    const char *help_title = "First help";
+    const char *help_text = "Still under construction";
+
     const int readtimeout_ms = 1000;
     const int writetimeout_ms = 1000;
 
@@ -45,11 +48,11 @@ Author: Garkushenko Nikolai Sergeevich.";
     const char *windowtitle = "AMP Protection configurator";
     const char *configfilename = "config.ini";
 
-    const char *comport_name = "comport";
+    const char *comport_key = "comport";
     const char *nocomport_value = "no selected";
 
-    const char *maxtemp_name = "mintemp";
-    const char *mintemp_name = "maxtemp";
+    const char *maxtemp_key = "mintemp";
+    const char *mintemp_key = "maxtemp";
     const int maxtemp = 120;
     const int mintemp = 0;
 
@@ -63,15 +66,15 @@ Author: Garkushenko Nikolai Sergeevich.";
     const int alarmon = 95;
     const int poweroff = 110;
 
-    const char *cooloff_name = "cooloff";
-    const char *cool35_name = "cool35";
-    const char *cool50_name = "cool50";
-    const char *cool70_name = "cool70";
-    const char *cool90_name = "cool90";
-    const char *cool100_name = "cool100";
-    const char *alarmoff_name = "alarmoff";
-    const char *alarmon_name = "alarmon";
-    const char *poweroff_name = "poweroff";
+    const char *cooloff_key = "cooloff";
+    const char *cool35_key = "cool35";
+    const char *cool50_ley = "cool50";
+    const char *cool70_key = "cool70";
+    const char *cool90_key = "cool90";
+    const char *cool100_key = "cool100";
+    const char *alarmoff_key = "alarmoff";
+    const char *alarmon_key = "alarmon";
+    const char *poweroff_key = "poweroff";
 
     const char *cooloff_label = "Cooler: OFF ";
     const char *cool35_label = "Cooler: 35% ";

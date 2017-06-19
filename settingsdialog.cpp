@@ -9,8 +9,8 @@ SettingsDialog::SettingsDialog(QSettings *a_settings_ptr, const QList<ConstructC
 {
     ui->setupUi(this);
 
-    m_mathlogic_qptr = new MathLogic(m_settings_ptr->value(m_constants.mintemp_name).toInt(),
-                                     m_settings_ptr->value(m_constants.maxtemp_name).toInt());
+    m_mathlogic_qptr = new MathLogic(m_settings_ptr->value(m_constants.mintemp_key).toInt(),
+                                     m_settings_ptr->value(m_constants.maxtemp_key).toInt());
 
     m_mainvb_lay = new QVBoxLayout();
 
@@ -59,7 +59,7 @@ void SettingsDialog::addComPortWidget()
     }
     else
     {
-        auto default_comport = m_settings_ptr->value(m_constants.comport_name,
+        auto default_comport = m_settings_ptr->value(m_constants.comport_key,
                                                      m_constants.nocomport_value);
         m_rs232_combo->addItem(default_comport.toString());
     }
@@ -81,9 +81,9 @@ void SettingsDialog::addTermperatureBlocks(
         m_temperatureblock_map.insert(it.getName(), ptr);
         m_mainvb_lay->addWidget(ptr);
 
-        if (it.getName() == m_constants.alarmoff_name ||
-            it.getName() == m_constants.alarmon_name ||
-            it.getName() == m_constants.poweroff_name)
+        if (it.getName() == m_constants.alarmoff_key ||
+            it.getName() == m_constants.alarmon_key ||
+            it.getName() == m_constants.poweroff_key)
             m_mathlogic_qptr->addExtraVal(it.getName(), it.getDefTemperature());
         else
             m_mathlogic_qptr->addVal(it.getName(), it.getDefTemperature());
@@ -131,7 +131,7 @@ void SettingsDialog::connectTemperatureBlocksToMathLogic()
 
 void SettingsDialog::saveComportToConfig()
 {
-    m_settings_ptr->setValue(m_constants.comport_name,
+    m_settings_ptr->setValue(m_constants.comport_key,
                              m_rs232_combo->currentText());
 }
 

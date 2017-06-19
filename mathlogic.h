@@ -19,13 +19,13 @@ class MathLogic : public QObject
   private:
     typedef QList<Node> NodeList_t;
     typedef QMap<QString, Node> ExtraNodeMap_t;
-    const char *cooloff = Constants::getInstance().cooloff_name;
-    const char *alarmoff = Constants::getInstance().alarmoff_name;
-    const char *alarmon = Constants::getInstance().alarmon_name;
-    const char *poweroff = Constants::getInstance().poweroff_name;
-    const char *cool70 = Constants::getInstance().cool70_name;
-    const char *cool90 = Constants::getInstance().cool90_name;
-    const char *cool100 = Constants::getInstance().cool100_name;
+    const char *cooloff = Constants::getInstance().cooloff_key;
+    const char *alarmoff = Constants::getInstance().alarmoff_key;
+    const char *alarmon = Constants::getInstance().alarmon_key;
+    const char *poweroff = Constants::getInstance().poweroff_key;
+    const char *cool70 = Constants::getInstance().cool70_key;
+    const char *cool90 = Constants::getInstance().cool90_key;
+    const char *cool100 = Constants::getInstance().cool100_key;
 
   public:
     explicit MathLogic(const int &a_min, const int &a_max);
