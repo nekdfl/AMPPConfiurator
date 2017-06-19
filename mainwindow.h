@@ -3,6 +3,7 @@
 
 #include <QHBoxLayout>
 #include <QMainWindow>
+#include <QMessageBox>
 #include <QPlainTextEdit>
 #include <QPointer>
 #include <QSettings>
@@ -44,6 +45,7 @@ class MainWindow : public QMainWindow
     inline void disableControls();
     inline void updateStatusBar();
     inline void addComportComBoxToToolBar();
+    void handleException(std::exception &ex);
 
     void resizeEvent(QResizeEvent *event);
 

@@ -21,6 +21,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    m_settings_qptr->setValue(m_constants.windowpostionx_key, x());
+    m_settings_qptr->setValue(m_constants.windowpostiony_key, y());
+    m_settings_qptr->sync();
     delete ui;
 }
 
@@ -90,6 +93,13 @@ void MainWindow::createGUI()
     this->setMaximumSize(m_constants.maxwindowwidth, m_constants.maxwindowheight);
     this->setMinimumSize(m_constants.minwindowwidth, m_constants.minwindowheight);
 
+    const int &def_x = m_constants.windowxpostion;
+    const int &def_y = m_constants.windowypostion;
+    const int &x = m_settings_qptr->value(m_constants.windowpostionx_key, def_x).toInt();
+    const int &y = m_settings_qptr->value(m_constants.windowpostiony_key, def_y).toInt();
+
+    this->move(x, y);
+
     m_console_qptr = new QPlainTextEdit();
     QPalette pal = palette();
     pal.setColor(QPalette::Base, Qt::black);
@@ -128,6 +138,8 @@ void MainWindow::createComPortProcessor()
 
 void MainWindow::initQActionConnections()
 {
+    connect(ui->action_About, &QAction::triggered, this, &MainWindow::onAboutAct);
+    connect(ui->action_help, &QAction::triggered, this, &MainWindow::onHelpAct);
     connect(ui->action_Preferances, &QAction::triggered, this, &MainWindow::onConfigureAct);
 
     connect(ui->action_Connect, &QAction::triggered, this, &MainWindow::onConnectAct);
@@ -194,6 +206,14 @@ void MainWindow::addComportComBoxToToolBar()
     //    }
 }
 
+void MainWindow::handleException(std::exception &ex)
+{
+    m_comportprocessor_qptr->close();
+    updateStatusBar();
+    disableControls();
+    QMessageBox::critical(this, tr("Fatal error"), tr(ex.what()), QMessageBox::Ok);
+}
+
 void MainWindow::onConfigureAct()
 {
     m_settingsdialog_qptr = new SettingsDialog(m_settings_qptr.data(), m_controlBlockElements);
@@ -206,15 +226,24 @@ void MainWindow::onHelpAct()
 
 void MainWindow::onAboutAct()
 {
+    QMessageBox::information(this, m_constants.about_title, m_constants.about_text, QMessageBox::Ok);
 }
 
 void MainWindow::onConnectAct()
 {
-    auto comportname = m_settings_qptr->value(m_constants.comport_name).toString();
-    m_comportprocessor_qptr->setComportName(comportname);
-    m_comportprocessor_qptr->open();
-    updateStatusBar();
-    enableControls();
+    try
+    {
+        auto comportname = m_settings_qptr->value(m_constants.comport_name).toString();
+        m_comportprocessor_qptr->setComportName(comportname);
+        m_comportprocessor_qptr->open();
+        updateStatusBar();
+        enableControls();
+        m_comportprocessor_qptr->requestPresetValue();
+    }
+    catch (std::exception &ex)
+    {
+        handleException(ex);
+    }
 }
 
 void MainWindow::onDisconnecAct()
@@ -266,13 +295,28 @@ void MainWindow::onLoadDefaults()
 
 void MainWindow::onReadFromDevice()
 {
-    m_comportprocessor_qptr->requestPresetValue();
+    try
+    {
+        m_comportprocessor_qptr->requestPresetValue();
+    }
+    catch (std::exception &ex)
+    {
+        handleException(ex);
+    }
 }
 
 void MainWindow::onWriteToDevice()
 {
+
     auto vmathlogic = m_cpanel_qptr->getMathLogicInstance();
-    m_comportprocessor_qptr->sendPresetValue(vmathlogic->getPairListFromBtree());
+    try
+    {
+        m_comportprocessor_qptr->sendPresetValue(vmathlogic->getPairListFromBtree());
+    }
+    catch (std::exception &ex)
+    {
+        handleException(ex);
+    }
 }
 
 void MainWindow::onQuitAct()
@@ -294,6 +338,7 @@ void MainWindow::onDataTransfered(QByteArray a_recievbuff)
 
 void MainWindow::onComPortReadFromDevice(const QList<QPair<QString, int>> &a_vallist)
 {
+
     m_cpanel_qptr->setPresetValue(a_vallist);
 }
 

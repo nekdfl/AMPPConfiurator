@@ -8,6 +8,21 @@ class Constants
     ~Constants();
 
     const char *debug_fromdevice = " 0 | 1 | 2 | 3 | 4 |  5 |   6  |  7  |   8   |\rOff|35%|50%|70%|90%|100%|Al_off|Al_on|OFF_pow|\r 35|40 |50 |60 |70 |80  |60    |95   |110\rWrite EEPROM - w  Read EEPROM - r\r----------------------------------------\r";
+    const char *witherror_error = " with error: ";
+    const char *cant_write_error = "Failed to write the data to port: ";
+    const char *cantwrite_all_error = "Failed to write the all data to port: ";
+
+    const char *failtoopenport_error = "Failed to open port: ";
+
+    const char *cantread_error = "Failed to read from port: ";
+    const char *nodatatoread_error = "No data was currently available for reading from port: ";
+    const char *operationtimeout_error = "Operation timed out or an error occurred for port: ";
+
+    const char *about_title = "About";
+    const char *about_text = "This program is distributed under the GNU3 or later license, development at the request of Glotov Yuri Vladimirovich.\n\
+The source code can be downloaded from\n\
+https://github.com/nekdfl/AMPPConfiurator.\n\
+Author: Garkushenko Nikolai Sergeevich.";
 
     const int readtimeout_ms = 1000;
     const int writetimeout_ms = 1000;
@@ -23,7 +38,7 @@ class Constants
     const char *disconnected_msg = "Disconnected";
 
     const char *applicationversion = "0.1a";
-    const char *organizationName = "Garkushenko Nick";
+    const char *organizationName = "Garkushenko Nickolay Sergeevich";
     const char *organizationdomain = "localhost";
     const char *applicationname = "AMPPConfigurator";
 
@@ -67,6 +82,11 @@ class Constants
     const char *alarmoff_label = "Alarm off   ";
     const char *alarmon_label = "Alarm on    ";
     const char *poweroff_label = "Poweroff    ";
+
+    const char *windowpostionx_key = "windowx";
+    const char *windowpostiony_key = "windowy";
+    const int windowxpostion = 100;
+    const int windowypostion = 100;
 
   private:
     static Constants *m_pinstance;

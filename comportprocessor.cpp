@@ -30,8 +30,15 @@ void ComPortProcessor::open()
         m_serialport->close();
 
     if (!m_serialport->open(QIODevice::ReadWrite))
-        qDebug() << "Failed to open port" << m_serialport->portName() << "error: " << m_serialport->error() << endl;
-    requestPresetValue();
+    {
+        Constants &constants = Constants::getInstance();
+        QString msg;
+        msg.append(constants.failtoopenport_error).append(m_serialport->portName()).append(constants.witherror_error).append(m_serialport->errorString());
+        std::runtime_error ex(std::string(msg.toLocal8Bit()));
+
+        qDebug() << constants.failtoopenport_error << m_serialport->portName() << constants.witherror_error << m_serialport->errorString() << endl;
+        throw ex;
+    }
 }
 
 void ComPortProcessor::close()
@@ -51,15 +58,15 @@ void ComPortProcessor::requestPresetValue()
 
 void ComPortProcessor::sendPresetValue(QList<QPair<QString, int>> a_vallist)
 {
-
     auto listsize = a_vallist.size();
     qDebug() << "list size " << listsize;
     int count = 0;
+    QByteArray data;
     while (!a_vallist.empty())
     {
+        data.clear();
         auto val = a_vallist.front().second;
         a_vallist.pop_front();
-        QByteArray data;
         QString num;
         write("w\r\n");
         read();
@@ -99,20 +106,35 @@ QString ComPortProcessor::getStatus()
 
 void ComPortProcessor::write(const QByteArray &writeData)
 {
+    Constants &constants = Constants::getInstance();
     qint64 bytesWritten = m_serialport->write(writeData);
 
     if (bytesWritten == -1)
     {
-        qDebug() << "Failed to write the data to port" << m_serialport->portName() << "error: " << m_serialport->error() << endl;
+        QString msg;
+        msg.append(constants.cant_write_error).append(m_serialport->portName()).append(constants.witherror_error).append(m_serialport->errorString());
+        std::runtime_error ex(std::string(msg.toLocal8Bit()));
+
+        qDebug() << constants.cant_write_error << m_serialport->portName() << constants.witherror_error << m_serialport->errorString() << endl;
+        throw ex;
     }
     else if (bytesWritten != writeData.size())
     {
-        qDebug() << "Failed to write the all data to port" << m_serialport->portName() << "error: " << m_serialport->error() << endl;
-        ;
+        QString msg;
+        msg.append(constants.cantwrite_all_error).append(m_serialport->portName()).append(constants.witherror_error).append(m_serialport->errorString());
+        std::runtime_error ex(std::string(msg.toLocal8Bit()));
+
+        qDebug() << constants.cantwrite_all_error << m_serialport->portName() << constants.witherror_error << m_serialport->errorString() << endl;
+        throw ex;
     }
     else if (!m_serialport->waitForBytesWritten(500))
     {
-        qDebug() << "Operation timed out or an error occurred for port " << m_serialport->portName() << "error: " << m_serialport->error() << endl;
+        QString msg;
+        msg.append(constants.operationtimeout_error).append(m_serialport->portName()).append(constants.witherror_error).append(m_serialport->errorString());
+        std::runtime_error ex(std::string(msg.toLocal8Bit()));
+
+        qDebug() << constants.operationtimeout_error << m_serialport->portName() << constants.witherror_error << m_serialport->errorString() << endl;
+        throw ex;
     }
     else
         emit dataTransfered(writeData);
@@ -120,17 +142,29 @@ void ComPortProcessor::write(const QByteArray &writeData)
 
 QByteArray ComPortProcessor::read()
 {
+    Constants &constants = Constants::getInstance();
     QByteArray readData = m_serialport->readAll();
+
     while (m_serialport->waitForReadyRead(500))
         readData.append(m_serialport->readAll());
 
     if (m_serialport->error() == QSerialPort::ReadError)
     {
-        qDebug() << "Failed to read from port" << m_serialport->portName() << "error: " << m_serialport->errorString() << endl;
+        QString msg;
+        msg.append(constants.cantread_error).append(m_serialport->portName()).append(constants.witherror_error).append(m_serialport->errorString());
+        std::runtime_error ex(std::string(msg.toLocal8Bit()));
+
+        qDebug() << constants.cantread_error << m_serialport->portName() << constants.witherror_error << m_serialport->errorString() << endl;
+        throw ex;
     }
     else if (m_serialport->error() == QSerialPort::TimeoutError && readData.isEmpty())
     {
-        qDebug() << "No data was currently available for reading from port " << m_serialport->portName() << endl;
+        QString msg;
+        msg.append(constants.nodatatoread_error).append(m_serialport->portName()).append(constants.witherror_error).append(m_serialport->errorString());
+        std::runtime_error ex(std::string(msg.toLocal8Bit()));
+
+        qDebug() << constants.nodatatoread_error << m_serialport->portName() << endl;
+        throw ex;
     }
     else
         emit dataRecived(readData);
