@@ -3,13 +3,13 @@
 
 #include <QHBoxLayout>
 #include <QMainWindow>
+#include <QPlainTextEdit>
+#include <QPointer>
 #include <QSettings>
 #include <QWidget>
 #include <QtGui>
-#include <QPlainTextEdit>
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
-#include <QPointer>
 
 #include "comportprocessor.h"
 #include "constants.h"
@@ -81,10 +81,10 @@ class MainWindow : public QMainWindow
     void onWriteToDevice();
     void onQuitAct();
 
-
     //comport events
     void onDataRecieved(QByteArray a_recievbuff);
     void onDataTransfered(QByteArray a_recievbuff);
+    void onComPortReadFromDevice(const QList<QPair<QString, int>> &a_vallist);
 };
 
 #endif // MAINWINDOW_H

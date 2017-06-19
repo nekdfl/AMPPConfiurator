@@ -7,6 +7,8 @@ class Constants
     static Constants &getInstance();
     ~Constants();
 
+    const char *debug_fromdevice = " 0 | 1 | 2 | 3 | 4 |  5 |   6  |  7  |   8   |\rOff|35%|50%|70%|90%|100%|Al_off|Al_on|OFF_pow|\r 35|40 |50 |60 |70 |80  |60    |95   |110\rWrite EEPROM - w  Read EEPROM - r\r----------------------------------------\r";
+
     const int readtimeout_ms = 1000;
     const int writetimeout_ms = 1000;
 
@@ -14,11 +16,11 @@ class Constants
     const int minwindowheight = 360;
     const int maxwindowwidth = 1024;
     const int maxwindowheight = 360;
-    const int consoleheght =360;
+    const int consoleheght = 360;
 
-    const char *connected_port_msg= "Connected to comport: ";
-    const char *connected_speed_msg= " with boudrate: ";
-    const char *disconnected_msg= "Disconnected";
+    const char *connected_port_msg = "Connected to comport: ";
+    const char *connected_speed_msg = " with boudrate: ";
+    const char *disconnected_msg = "Disconnected";
 
     const char *applicationversion = "0.1a";
     const char *organizationName = "Garkushenko Nick";

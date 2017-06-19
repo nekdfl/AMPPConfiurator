@@ -2,7 +2,7 @@
 
 CPanel::CPanel(const QList<ConstructControlBlock> &controlBlockElements,
                const int &a_min, const int &a_max, QWidget *parent)
-    :  QWidget(parent),
+    : QWidget(parent),
       m_controlBlockElements(controlBlockElements),
       m_constants(Constants::getInstance())
 {
@@ -18,7 +18,6 @@ CPanel::CPanel(const QList<ConstructControlBlock> &controlBlockElements,
     connectMathLogicToControlBlocks();
     connectControlBlocksToMathLogic();
 }
-
 
 MathLogic *CPanel::getMathLogicInstance()
 {
@@ -50,14 +49,14 @@ void CPanel::reloadSettings(const QList<ConstructControlBlock> &controlBlockElem
     updateControlBlocks();
 }
 
-void CPanel::setPresetValue(const QList<QPair<QString, int> > &a_vallist)
+void CPanel::setPresetValue(const QList<QPair<QString, int>> &a_vallist)
 {
     for (auto &it : a_vallist)
     {
+        qDebug() << "set preset " << it.first << " : " << it.second;
         m_mathlogic_qptr->onDialMoved(it.first, it.second);
-//        m_controlblock_map[it.first]->onValueChange(it.second);
+        //        m_controlblock_map[it.first]->onValueChange(it.second);
         m_controlblock_map[it.first]->onValueChanged();
-
     }
 }
 
@@ -106,5 +105,3 @@ void CPanel::addToMathLogic(auto &it)
     else
         m_mathlogic_qptr->addVal(it.getName(), it.getDefTemperature());
 }
-
-

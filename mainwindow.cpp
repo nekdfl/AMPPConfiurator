@@ -30,8 +30,6 @@ void MainWindow::initSettings()
     qDebug() << "config path: " << QDir::currentPath() + "/" + m_constants.configfilename;
     m_settings_qptr = new QSettings(QDir::currentPath() + "/" + m_constants.configfilename, QSettings::IniFormat);
 
-
-
     const int min = m_settings_qptr->value(m_constants.mintemp_name, m_constants.mintemp).toInt();
     const int max = m_settings_qptr->value(m_constants.maxtemp_name, m_constants.maxtemp).toInt();
 
@@ -76,14 +74,14 @@ void MainWindow::initCntrolBlockList()
 
     m_controlBlockElements.clear();
     m_controlBlockElements = {ConstructControlBlock(m_constants.cooloff_name, m_constants.cooloff_label, min, max, cooloff),
-                      ConstructControlBlock(m_constants.cool35_name, m_constants.cool35_label, min, max, cool35),
-                      ConstructControlBlock(m_constants.cool50_name, m_constants.cool50_label, min, max, cool50),
-                      ConstructControlBlock(m_constants.cool70_name, m_constants.cool70_label, min, max, cool70),
-                      ConstructControlBlock(m_constants.cool90_name, m_constants.cool90_label, min, max, cool90),
-                      ConstructControlBlock(m_constants.cool100_name, m_constants.cool100_label, min, max, cool100),
-                      ConstructControlBlock(m_constants.alarmoff_name, m_constants.alarmoff_label, min, max, alarmoff),
-                      ConstructControlBlock(m_constants.alarmon_name, m_constants.alarmon_label, min, max, alarmon),
-                      ConstructControlBlock(m_constants.poweroff_name, m_constants.poweroff_label, min, max, poweroff)};
+                              ConstructControlBlock(m_constants.cool35_name, m_constants.cool35_label, min, max, cool35),
+                              ConstructControlBlock(m_constants.cool50_name, m_constants.cool50_label, min, max, cool50),
+                              ConstructControlBlock(m_constants.cool70_name, m_constants.cool70_label, min, max, cool70),
+                              ConstructControlBlock(m_constants.cool90_name, m_constants.cool90_label, min, max, cool90),
+                              ConstructControlBlock(m_constants.cool100_name, m_constants.cool100_label, min, max, cool100),
+                              ConstructControlBlock(m_constants.alarmoff_name, m_constants.alarmoff_label, min, max, alarmoff),
+                              ConstructControlBlock(m_constants.alarmon_name, m_constants.alarmon_label, min, max, alarmon),
+                              ConstructControlBlock(m_constants.poweroff_name, m_constants.poweroff_label, min, max, poweroff)};
 }
 
 void MainWindow::createGUI()
@@ -123,18 +121,19 @@ void MainWindow::createGUI()
 void MainWindow::createComPortProcessor()
 {
     m_comportprocessor_qptr = new ComPortProcessor();
-    connect(m_comportprocessor_qptr, &ComPortProcessor::dataRecived, this, &MainWindow::onDataRecieved) ;
+    connect(m_comportprocessor_qptr, &ComPortProcessor::dataRecived, this, &MainWindow::onDataRecieved);
     connect(m_comportprocessor_qptr, &ComPortProcessor::dataTransfered, this, &MainWindow::onDataTransfered);
+    connect(m_comportprocessor_qptr, &ComPortProcessor::presetValueReady, this, &MainWindow::onComPortReadFromDevice);
 }
 
 void MainWindow::initQActionConnections()
 {
     connect(ui->action_Preferances, &QAction::triggered, this, &MainWindow::onConfigureAct);
 
-    connect(ui->action_Connect, &QAction::triggered, this , & MainWindow::onConnectAct);
-    connect(ui->action_Disconnect, &QAction::triggered, this , & MainWindow::onDisconnecAct);
-    connect (ui->action_Show_hide_console, &QAction::triggered, this, &MainWindow::onShowHideConsoleAct);
-    connect (ui->action_Clear_console, &QAction::triggered, this, &MainWindow::onClearConsoleAct);
+    connect(ui->action_Connect, &QAction::triggered, this, &MainWindow::onConnectAct);
+    connect(ui->action_Disconnect, &QAction::triggered, this, &MainWindow::onDisconnecAct);
+    connect(ui->action_Show_hide_console, &QAction::triggered, this, &MainWindow::onShowHideConsoleAct);
+    connect(ui->action_Clear_console, &QAction::triggered, this, &MainWindow::onClearConsoleAct);
     connect(ui->action_Save_as_default, &QAction::triggered, this, &MainWindow::onSaveDefaults);
     connect(ui->action_Load_default, &QAction::triggered, this, &MainWindow::onLoadDefaults);
     connect(ui->action_Read_from_device, &QAction::triggered, this, &MainWindow::onReadFromDevice);
@@ -151,7 +150,6 @@ void MainWindow::initControlsState()
     ui->action_Load_default->setEnabled(false);
     ui->action_Read_from_device->setEnabled(false);
     ui->action_Write_to_device->setEnabled(false);
-
 }
 
 void MainWindow::enableControls()
@@ -166,7 +164,6 @@ void MainWindow::enableControls()
     ui->action_Load_default->setEnabled(true);
     ui->action_Read_from_device->setEnabled(true);
     ui->action_Write_to_device->setEnabled(true);
-
 }
 
 void MainWindow::disableControls()
@@ -181,12 +178,11 @@ void MainWindow::disableControls()
     ui->action_Load_default->setEnabled(false);
     ui->action_Read_from_device->setEnabled(false);
     ui->action_Write_to_device->setEnabled(false);
-
 }
 
 void MainWindow::updateStatusBar()
 {
-    m_status_lbl->setText( m_comportprocessor_qptr->getStatus());
+    m_status_lbl->setText(m_comportprocessor_qptr->getStatus());
 }
 
 void MainWindow::addComportComBoxToToolBar()
@@ -206,12 +202,10 @@ void MainWindow::onConfigureAct()
 
 void MainWindow::onHelpAct()
 {
-
 }
 
 void MainWindow::onAboutAct()
 {
-
 }
 
 void MainWindow::onConnectAct()
@@ -255,7 +249,7 @@ void MainWindow::onClearConsoleAct()
 
 void MainWindow::onSaveDefaults()
 {
-    auto vmathlogic= m_cpanel_qptr->getMathLogicInstance();
+    auto vmathlogic = m_cpanel_qptr->getMathLogicInstance();
     auto vtemperature_list = vmathlogic->getPairListFromBtree();
     for (auto &it : vtemperature_list)
     {
@@ -277,7 +271,7 @@ void MainWindow::onReadFromDevice()
 
 void MainWindow::onWriteToDevice()
 {
-    auto vmathlogic= m_cpanel_qptr->getMathLogicInstance();
+    auto vmathlogic = m_cpanel_qptr->getMathLogicInstance();
     m_comportprocessor_qptr->sendPresetValue(vmathlogic->getPairListFromBtree());
 }
 
@@ -296,6 +290,11 @@ void MainWindow::onDataTransfered(QByteArray a_recievbuff)
 {
     m_console_qptr->insertPlainText(">>");
     m_console_qptr->insertPlainText(a_recievbuff);
+}
+
+void MainWindow::onComPortReadFromDevice(const QList<QPair<QString, int>> &a_vallist)
+{
+    m_cpanel_qptr->setPresetValue(a_vallist);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
