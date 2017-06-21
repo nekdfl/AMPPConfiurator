@@ -39,6 +39,8 @@ void ComPortProcessor::open()
         qDebug() << constants.failtoopenport_error << m_serialport->portName() << constants.witherror_error << m_serialport->errorString() << endl;
         throw ex;
     }
+
+    handshake();
 }
 
 void ComPortProcessor::close()
@@ -104,7 +106,13 @@ QString ComPortProcessor::getStatus()
     return message;
 }
 
-void ComPortProcessor::write(const QByteArray &writeData)
+void ComPortProcessor::handshake()
+{
+    QByteArray data(Constants::getInstance().handshare_request);
+    write(data, false);
+}
+
+void ComPortProcessor::write(const QByteArray &writeData, bool sendsignal)
 {
     Constants &constants = Constants::getInstance();
     qint64 bytesWritten = m_serialport->write(writeData);
@@ -136,7 +144,7 @@ void ComPortProcessor::write(const QByteArray &writeData)
         qDebug() << constants.operationtimeout_error << m_serialport->portName() << constants.witherror_error << m_serialport->errorString() << endl;
         throw ex;
     }
-    else
+    else if (sendsignal)
         emit dataTransfered(writeData);
 }
 

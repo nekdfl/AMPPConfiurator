@@ -91,6 +91,10 @@ Author: Garkushenko Nikolai Sergeevich.";
     const int windowxpostion = 100;
     const int windowypostion = 100;
 
+    const int consolemaxline = 100;
+
+    const char *handshare_request = "255\r\n";
+
   private:
     static Constants *m_pinstance;
 

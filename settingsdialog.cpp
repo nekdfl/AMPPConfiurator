@@ -50,6 +50,8 @@ void SettingsDialog::addComPortWidget()
     m_rs232_combo = new QComboBox();
 
     auto port_list = QSerialPortInfo::availablePorts();
+    auto default_comport = m_settings_ptr->value(m_constants.comport_key, m_constants.nocomport_value).toString();
+
     if (!port_list.empty())
     {
         for (auto &it : port_list)
@@ -59,10 +61,12 @@ void SettingsDialog::addComPortWidget()
     }
     else
     {
-        auto default_comport = m_settings_ptr->value(m_constants.comport_key,
-                                                     m_constants.nocomport_value);
-        m_rs232_combo->addItem(default_comport.toString());
+        m_rs232_combo->addItem(default_comport);
     }
+
+    auto previosvalue_index = m_rs232_combo->findText(default_comport);
+    if (previosvalue_index != -1)
+        m_rs232_combo->setCurrentIndex(previosvalue_index);
 
     m_horizrs232_lay->addWidget(m_rs232_lbl);
     m_horizrs232_lay->addWidget(m_rs232_combo);
@@ -70,14 +74,11 @@ void SettingsDialog::addComPortWidget()
     m_mainvb_lay->addWidget(m_comportwidget_qptr);
 }
 
-void SettingsDialog::addTermperatureBlocks(
-    const QList<ConstructControlBlock> &a_cntrBlckList)
+void SettingsDialog::addTermperatureBlocks(const QList<ConstructControlBlock> &a_cntrBlckList)
 {
     for (auto &it : a_cntrBlckList)
     {
-        auto ptr = new TemperatureBlock(
-            it.getName(), it.getLabel(), it.getMintemperature(),
-            it.getMaxTemperature(), it.getDefTemperature());
+        auto ptr = new TemperatureBlock(it.getName(), it.getLabel(), it.getMintemperature(), it.getMaxTemperature(), it.getDefTemperature());
         m_temperatureblock_map.insert(it.getName(), ptr);
         m_mainvb_lay->addWidget(ptr);
 
@@ -131,8 +132,7 @@ void SettingsDialog::connectTemperatureBlocksToMathLogic()
 
 void SettingsDialog::saveComportToConfig()
 {
-    m_settings_ptr->setValue(m_constants.comport_key,
-                             m_rs232_combo->currentText());
+    m_settings_ptr->setValue(m_constants.comport_key, m_rs232_combo->currentText());
 }
 
 void SettingsDialog::saveTemperatureListToConfig()

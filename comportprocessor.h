@@ -35,7 +35,8 @@ class ComPortProcessor : public QObject
     QTimer m_timer;
 
   private:
-    void write(const QByteArray &writeData);
+    inline void handshake();
+    void write(const QByteArray &writeData, bool sendsignal = true);
     QByteArray read();
     void parseResponse(const QByteArray &a_recievbuff);
 

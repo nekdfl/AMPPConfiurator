@@ -45,6 +45,7 @@ class MainWindow : public QMainWindow
     inline void disableControls();
     inline void updateStatusBar();
     inline void addComportComBoxToToolBar();
+    inline void moveConsoleCursorToEnd();
     void handleException(std::exception &ex);
 
     void resizeEvent(QResizeEvent *event);

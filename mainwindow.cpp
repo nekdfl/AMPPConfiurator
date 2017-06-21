@@ -109,6 +109,7 @@ void MainWindow::createGUI()
     m_console_qptr->setCursorWidth(0);
     m_console_qptr->setMaximumHeight(m_constants.consoleheght);
     m_console_qptr->setPalette(pal);
+    m_console_qptr->setMaximumBlockCount(m_constants.consolemaxline);
 
     m_cpanel_qptr = new CPanel(m_controlBlockElements, m_settings_qptr->value(m_constants.mintemp_key).toInt(),
                                m_settings_qptr->value(m_constants.maxtemp_key).toInt());
@@ -206,6 +207,13 @@ void MainWindow::addComportComBoxToToolBar()
     //    }
 }
 
+void MainWindow::moveConsoleCursorToEnd()
+{
+    QTextCursor c = m_console_qptr->textCursor();
+    c.movePosition(QTextCursor::End);
+    m_console_qptr->setTextCursor(c);
+}
+
 void MainWindow::handleException(std::exception &ex)
 {
     m_comportprocessor_qptr->close();
@@ -260,14 +268,17 @@ void MainWindow::onShowHideConsoleAct()
     {
         m_console_qptr->hide();
         this->setMaximumHeight(m_constants.maxwindowheight);
+        this->setMinimumHeight(m_constants.maxwindowheight);
         this->resize(m_constants.maxwindowwidth, this->maximumHeight());
         ui->action_Clear_console->setEnabled(false);
     }
     else
     {
-        m_console_qptr->show();
+
         this->setMaximumHeight(m_constants.maxwindowheight + m_constants.consoleheght);
+        this->setMinimumHeight(m_constants.maxwindowheight + m_constants.consoleheght);
         this->resize(m_constants.maxwindowwidth, this->maximumHeight());
+        m_console_qptr->show();
         ui->action_Clear_console->setEnabled(true);
     }
 }
@@ -329,17 +340,18 @@ void MainWindow::onDataRecieved(QByteArray a_recievbuff)
 {
     m_console_qptr->insertPlainText("<<");
     m_console_qptr->insertPlainText(a_recievbuff);
+    moveConsoleCursorToEnd();
 }
 
 void MainWindow::onDataTransfered(QByteArray a_recievbuff)
 {
     m_console_qptr->insertPlainText(">>");
     m_console_qptr->insertPlainText(a_recievbuff);
+    moveConsoleCursorToEnd();
 }
 
 void MainWindow::onComPortReadFromDevice(const QList<QPair<QString, int>> &a_vallist)
 {
-
     m_cpanel_qptr->setPresetValue(a_vallist);
 }
 
